@@ -1,2 +1,0 @@
-# MimiFiscal
-MimiFiscal
