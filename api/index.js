@@ -7,7 +7,7 @@ const port = process.env.PORT || 3000;
 const mongoose = require('mongoose');
 
 // Schimbă acest șir cu șirul tău de conectare de la MongoDB Atlas
-const MONGODB_URI = "mongodb+srv://Mimi<Mvers320699>@cluster0.03xkswe.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
+const MONGODB_URI = "mongodb+srv://Mimi:Mvers320699@cluster0.03xkswe.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
 
 // Conectarea la baza de date
 mongoose.connect(MONGODB_URI)
