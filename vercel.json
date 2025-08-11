@@ -1,14 +1,8 @@
 {
-  "functions": {
-    "api/index.js": {
-      "runtime": "vercel-node@16.0.0",
-      "memory": 1024
-    }
-  },
-  "routes": [
+  "rewrites": [
     {
-      "src": "/api/.*",
-      "dest": "/api/index.js"
+      "source": "/(.*)",
+      "destination": "/public/$1"
     }
   ]
 }
