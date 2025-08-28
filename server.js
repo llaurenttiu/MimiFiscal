@@ -65,8 +65,8 @@ app.post('/api/generare-pdf-dubla-impozitare', (req, res) => {
     try {
         const { nume, adresa, salariu } = req.body;
 
-        // Creează un document PDF
-        const doc = new PDFDocument();
+        // Adaugă o opțiune de font pentru a evita erorile pe Vercel
+        const doc = new PDFDocument({ font: 'Helvetica' });
         const pdfPath = path.join(__dirname, 'temp', 'dubla-impozitare.pdf');
 
         // Asigură-te că directorul `temp` există
