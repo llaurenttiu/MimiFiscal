@@ -1,4 +1,14 @@
-// ... (codul existent, inclusiv linia `app.use(express.json());`)
+const express = require('express');
+const path = require('path');
+const fs = require('fs');
+
+const app = express();
+const port = process.env.PORT || 3000;
+
+app.use(express.json());
+
+// Servește fișierele statice din directorul `public`
+app.use(express.static(path.join(__dirname, 'public')));
 
 // Ruta pentru API-ul de înregistrare
 app.post('/api/register', (req, res) => {
@@ -49,4 +59,20 @@ app.post('/api/login', (req, res) => {
     }
 });
 
-// ... (restul codului, inclusiv ruta '/')
+// Aici ai ruta principală care servește fișierul `index.html`
+app.get('/', (req, res) => {
+    const indexPath = path.join(__dirname, 'public', 'index.html');
+    fs.readFile(indexPath, 'utf8', (err, data) => {
+        if (err) {
+            console.error('Failed to read index.html:', err);
+            return res.status(500).send('Internal Server Error');
+        }
+        res.status(200).send(data);
+    });
+});
+
+app.listen(port, () => {
+    console.log(`Server is running on port ${port}`);
+});
+
+module.exports = app;
