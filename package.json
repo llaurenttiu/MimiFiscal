@@ -1,10 +1,10 @@
 {
-  "name": "mimi-fiscal-nou",
+  "name": "mimi-fiscal",
   "version": "1.0.0",
   "description": "",
-  "main": "api/index.js",
+  "main": "server.js",
   "scripts": {
-    "start": "node api/index.js"
+    "start": "node server.js"
   },
   "keywords": [],
   "author": "",
