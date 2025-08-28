@@ -1,6 +1,7 @@
 const express = require('express');
 const path = require('path');
 const fs = require('fs');
+const PDFDocument = require('pdfkit');
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -55,6 +56,56 @@ app.post('/api/login', (req, res) => {
         res.status(500).json({
             success: false,
             message: "A apărut o eroare la autentificare."
+        });
+    }
+});
+
+// Ruta pentru a genera PDF-ul
+app.post('/api/generare-pdf-dubla-impozitare', (req, res) => {
+    try {
+        const { nume, adresa, salariu } = req.body;
+
+        // Creează un document PDF
+        const doc = new PDFDocument();
+        const pdfPath = path.join(__dirname, 'temp', 'dubla-impozitare.pdf');
+
+        // Asigură-te că directorul `temp` există
+        if (!fs.existsSync(path.join(__dirname, 'temp'))) {
+            fs.mkdirSync(path.join(__dirname, 'temp'));
+        }
+
+        // Pipe the document to a file
+        doc.pipe(fs.createWriteStream(pdfPath));
+
+        // Adaugă conținut în PDF
+        doc.fontSize(16).text('Certificat de Evitare a Dubei Impozitări', { align: 'center' });
+        doc.moveDown();
+        doc.fontSize(12).text(`Nume: ${nume}`);
+        doc.text(`Adresă: ${adresa}`);
+        doc.text(`Salariu anual: ${salariu} €`);
+        doc.moveDown();
+        doc.text('Acest document certifică faptul că persoana menționată mai sus a plătit impozite în Germania și, prin urmare, este scutită de dubla impozitare în România, conform convenției fiscale.', { align: 'justify' });
+
+        doc.end();
+
+        // Așteaptă ca PDF-ul să fie generat și trimite-l
+        doc.on('end', () => {
+            res.download(pdfPath, 'certificat-dubla-impozitare.pdf', (err) => {
+                if (err) {
+                    console.error("Eroare la trimiterea PDF-ului:", err);
+                    res.status(500).json({
+                        success: false,
+                        message: "A apărut o eroare la generarea fișierului."
+                    });
+                }
+            });
+        });
+
+    } catch (error) {
+        console.error("Eroare la generarea PDF-ului:", error);
+        res.status(500).json({
+            success: false,
+            message: "A apărut o eroare la generarea PDF-ului."
         });
     }
 });
