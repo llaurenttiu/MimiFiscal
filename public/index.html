@@ -141,6 +141,10 @@
     © 2025 MimiFiscal · Operat de [Numele firmei] · GDPR Compliant · Made in 🇩🇪 + 🇷🇴
   </footer>
 
+  <!-- Include PDF generation libraries -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
+  
   <script>
     const form = document.getElementById('auth-form');
     const statusMessage = document.getElementById('status-message');
@@ -208,42 +212,38 @@
         }
     });
 
-    // JavaScript pentru noul formular PDF
+    // New JavaScript logic for PDF generation in the browser
     const pdfForm = document.getElementById('pdf-form');
     pdfForm.addEventListener('submit', async (e) => {
         e.preventDefault();
 
         const formData = new FormData(pdfForm);
-        const data = Object.fromEntries(formData.entries());
+        const nume = formData.get('nume');
+        const adresa = formData.get('adresa');
+        const salariu = formData.get('salariu');
 
-        try {
-            const response = await fetch('/api/generare-pdf-dubla-impozitare', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(data),
-            });
-
-            if (response.ok) {
-                const blob = await response.blob();
-                const url = window.URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.style.display = 'none';
-                a.href = url;
-                a.download = 'certificat-dubla-impozitare.pdf';
-                document.body.appendChild(a);
-                a.click();
-                window.URL.revokeObjectURL(url);
-                alert('PDF-ul a fost generat și descărcat cu succes!');
-            } else {
-                const error = await response.json();
-                alert('Eroare la generarea PDF-ului: ' + error.message);
+        // Prepare the document definition for pdfmake
+        const docDefinition = {
+            content: [
+                { text: 'Certificat de Evitare a Dubei Impozitări', style: 'header' },
+                { text: ' ', margin: [0, 20] }, // Spacer
+                { text: `Nume: ${nume}` },
+                { text: `Adresă: ${adresa}` },
+                { text: `Salariu anual: ${salariu} €` },
+                { text: ' ', margin: [0, 20] }, // Spacer
+                { text: 'Acest document certifică faptul că persoana menționată mai sus a plătit impozite în Germania și, prin urmare, este scutită de dubla impozitare în România, conform convenției fiscale.', alignment: 'justify' },
+            ],
+            styles: {
+                header: {
+                    fontSize: 16,
+                    bold: true,
+                    alignment: 'center'
+                }
             }
-        } catch (error) {
-            console.error('Eroare de rețea:', error);
-            alert('Eroare de conectare la server. Verifică conexiunea la internet.');
-        }
+        };
+
+        // Generate the PDF
+        pdfMake.createPdf(docDefinition).download('certificat-dubla-impozitare.pdf');
     });
   </script>
 </body>
