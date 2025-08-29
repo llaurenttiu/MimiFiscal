@@ -110,6 +110,23 @@
       </form>
     </div>
 
+    <!-- Secțiunea pentru asistentul fiscal AI -->
+    <div class="bg-gray-50 p-6 rounded-xl max-w-3xl mx-auto text-left shadow mt-12">
+      <h4 class="text-xl font-semibold mb-4 text-blue-800">💬 Asistent Fiscal AI</h4>
+      <div id="chat-container" class="bg-white p-4 rounded-md h-64 overflow-y-auto mb-4">
+        <p class="text-gray-500 italic">Întreabă-mă orice despre impozite și formulare fiscale, și îți voi oferi informații utile!</p>
+      </div>
+      <div class="flex space-x-2">
+        <input type="text" id="user-input" placeholder="Scrie întrebarea ta..." class="flex-grow px-4 py-2 border rounded-md focus:outline-none focus:ring focus:border-blue-300">
+        <button id="send-button" class="bg-blue-700 text-white px-6 py-2 rounded-full hover:bg-blue-800 transition flex items-center justify-center">
+          Trimite ✨
+        </button>
+      </div>
+      <div id="loading-indicator" class="hidden mt-2 text-sm text-gray-500">
+        Se procesează...
+      </div>
+    </div>
+    
     <div class="bg-gray-50 p-6 rounded-xl max-w-3xl mx-auto text-left shadow mt-8">
       <h4 class="text-xl font-semibold mb-4 text-blue-800" id="auth-title">Creează-ți un cont</h4>
       <form id="auth-form" class="space-y-4">
@@ -249,42 +266,57 @@
     const pdfFormImpozitare = document.getElementById('pdf-form-impozitare');
     pdfFormImpozitare.addEventListener('submit', async (e) => {
         e.preventDefault();
-
-        // Download the official PDF form
-        const formUrl = 'https://www.anaf.ro/static/10/anaf/formulare/2020/certificat_dubla_impozitare_2020.pdf';
-        const existingPdfBytes = await fetch(formUrl).then(res => res.arrayBuffer());
-
-        // Load the PDF and get the form
-        const { PDFDocument } = PDFLib;
-        const pdfDoc = await PDFDocument.load(existingPdfBytes);
-        const form = pdfDoc.getForm();
-
-        // Get user data from form
-        const formData = new FormData(pdfFormImpozitare);
-        const nume = formData.get('nume_impozitare');
-        const adresa = formData.get('adresa_impozitare');
-        const salariu = formData.get('salariu_impozitare');
         
-        // Fill out the form fields (These field names are examples, you need to find the correct ones)
-        const nameField = form.getTextField('text_name');
-        const addressField = form.getTextField('text_address');
-        const salaryField = form.getTextField('text_salary');
-
-        if (nameField) nameField.setText(nume);
-        if (addressField) addressField.setText(adresa);
-        if (salaryField) salaryField.setText(salariu.toString());
-
-        // Save the modified PDF
-        const pdfBytes = await pdfDoc.save();
+        // Fetch the PDF from a different domain to avoid CORS issues
+        const formUrl = 'https://anaf-ro-forms.vercel.app/a3_724.pdf';
         
-        // Create a Blob and a download link
-        const blob = new Blob([pdfBytes], { type: 'application/pdf' });
-        const link = document.createElement('a');
-        link.href = URL.createObjectURL(blob);
-        link.download = 'formular-dubla-impozitare-completat.pdf';
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
+        try {
+            // Use fetch with a different approach
+            const response = await fetch(formUrl, { method: 'GET' });
+            
+            if (!response.ok) {
+                throw new Error(`Failed to fetch PDF: ${response.statusText}`);
+            }
+
+            const existingPdfBytes = await response.arrayBuffer();
+            
+            // Load the PDF and get the form
+            const { PDFDocument } = PDFLib;
+            const pdfDoc = await PDFDocument.load(existingPdfBytes);
+            const form = pdfDoc.getForm();
+
+            // Get user data from form
+            const formData = new FormData(pdfFormImpozitare);
+            const nume = formData.get('nume_impozitare');
+            const adresa = formData.get('adresa_impozitare');
+            const salariu = formData.get('salariu_impozitare');
+            
+            // Fill out the form fields (These field names are examples, you need to find the correct ones)
+            const nameField = form.getTextField('text_name');
+            const addressField = form.getTextField('text_address');
+            const salaryField = form.getTextField('text_salary');
+
+            if (nameField) nameField.setText(nume);
+            if (addressField) addressField.setText(adresa);
+            if (salaryField) salaryField.setText(salariu.toString());
+
+            // Save the modified PDF
+            const pdfBytes = await pdfDoc.save();
+            
+            // Create a Blob and a download link
+            const blob = new Blob([pdfBytes], { type: 'application/pdf' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = 'formular-dubla-impozitare-completat.pdf';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+
+        } catch (error) {
+            console.error('Error generating PDF:', error);
+            // Optionally, show a message to the user
+            alert('A apărut o eroare la generarea PDF-ului. Te rugăm să încerci din nou mai târziu.');
+        }
     });
 
     // New JavaScript logic for PDF generation for Kindergeld
@@ -321,6 +353,85 @@
         };
 
         pdfMake.createPdf(docDefinition).download('cerere-kindergeld.pdf');
+    });
+
+    // JavaScript logic for the AI assistant
+    const userInput = document.getElementById('user-input');
+    const sendButton = document.getElementById('send-button');
+    const chatContainer = document.getElementById('chat-container');
+    const loadingIndicator = document.getElementById('loading-indicator');
+
+    // Add a loading message to the chat
+    function addLoadingMessage() {
+      const loadingDiv = document.createElement('div');
+      loadingDiv.id = 'loading-message';
+      loadingDiv.className = 'text-gray-500 italic text-sm mt-2';
+      loadingDiv.textContent = 'Asistentul AI procesează...';
+      chatContainer.appendChild(loadingDiv);
+      chatContainer.scrollTop = chatContainer.scrollHeight;
+    }
+
+    // Remove the loading message from the chat
+    function removeLoadingMessage() {
+      const loadingDiv = document.getElementById('loading-message');
+      if (loadingDiv) {
+        loadingDiv.remove();
+      }
+    }
+    
+    // Function to add a message to the chat container
+    function addMessage(text, isUser = false) {
+      const messageDiv = document.createElement('div');
+      messageDiv.className = `p-2 my-2 rounded-lg max-w-sm ${isUser ? 'bg-blue-100 text-right self-end' : 'bg-gray-200 self-start'}`;
+      messageDiv.textContent = text;
+      chatContainer.appendChild(messageDiv);
+      chatContainer.scrollTop = chatContainer.scrollHeight; // Auto-scroll to the latest message
+    }
+
+    sendButton.addEventListener('click', async () => {
+        const prompt = userInput.value.trim();
+        if (prompt === '') return;
+
+        addMessage(prompt, true);
+        userInput.value = '';
+        loadingIndicator.classList.remove('hidden');
+
+        try {
+            const systemPrompt = "Acționează ca un expert fiscal român specializat pe legislația română și germană, cu accent pe dubla impozitare și beneficii sociale pentru românii din Germania. Răspunde la întrebările utilizatorului într-un mod concis, prietenos și informativ, oferind recomandări generale, dar specificând clar că nu reprezinți un consilier fiscal autorizat. Concentrează-te pe formulare fiscale precum cele de la ANAF și pe proceduri precum Kindergeld. Fii cât mai util și mai simplu.";
+
+            const userQuery = prompt;
+            const apiKey = ""
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
+
+            const payload = {
+                contents: [{ parts: [{ text: userQuery }] }],
+                tools: [{ "google_search": {} }],
+                systemInstruction: {
+                    parts: [{ text: systemPrompt }]
+                },
+            };
+
+            const response = await fetch(apiUrl, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+
+            const result = await response.json();
+            const text = result?.candidates?.[0]?.content?.parts?.[0]?.text || 'Nu am putut găsi un răspuns. Te rog să încerci din nou.';
+            addMessage(text, false);
+        } catch (error) {
+            console.error("Eroare la apelul API Gemini:", error);
+            addMessage('A apărut o eroare la procesarea cererii. Te rog să încerci din nou.', false);
+        } finally {
+            loadingIndicator.classList.add('hidden');
+        }
+    });
+
+    userInput.addEventListener('keydown', (event) => {
+      if (event.key === 'Enter') {
+        sendButton.click();
+      }
     });
   </script>
 </body>
