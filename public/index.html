@@ -46,7 +46,7 @@
       <h3 class="text-3xl md:text-4xl font-bold text-slate-800 mb-4">Ce oferim</h3>
       <p class="text-lg text-slate-600">Servicii digitale create special pentru nevoile tale.</p>
     </div>
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-7xl mx-auto">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
       <div class="bg-white p-8 rounded-2xl shadow-lg hover:shadow-xl transition-shadow flex flex-col items-center text-center">
         <div class="bg-green-100 text-green-700 rounded-full p-4 mb-4">
           <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"></path><path fill-rule="evenodd" d="M4 5a2 2 0 012-2h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V15a2 2 0 01-2 2h-2.586a1 1 0 01-.707-.293l-3.414-3.414A1 1 0 015 11.586V7a2 2 0 012-2h2.586zM8 7a1 1 0 011-1h1.586a1 1 0 01.707.293l3.414 3.414A1 1 0 0115 11.586V15a1 1 0 01-1 1h-2a1 1 0 01-1-1v-4a1 1 0 00-1-1h-2a1 1 0 00-1 1v4a1 1 0 01-1 1H4a1 1 0 01-1-1v-4.414a1 1 0 01.293-.707l3.414-3.414A1 1 0 018 7z" clip-rule="evenodd"></path></svg>
@@ -67,28 +67,28 @@
           Accesează
         </a>
       </div>
-      <div id="demo" class="bg-white p-8 rounded-2xl shadow-lg hover:shadow-xl transition-shadow flex flex-col text-center">
-        <div class="bg-blue-100 text-blue-700 rounded-full p-4 mb-4">
-          <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"></path><path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"></path></svg>
-        </div>
-        <h4 class="text-xl font-semibold mb-2 text-slate-900">💬 AI Fiscal</h4>
-        <p class="text-base text-slate-600 mb-4">Întreabă robotul fiscal ce formular ai nevoie și ce taxe poți deduce.</p>
-        <div class="mt-auto bg-gray-50 p-6 rounded-xl text-left shadow-inner">
-            <h4 class="text-lg font-bold mb-2 text-blue-800">Testează-l aici:</h4>
-            <!-- Câmpul pentru cheia API și butonul Salvează au fost ascunse -->
-            <div id="chat-container" class="bg-white p-4 rounded-xl h-48 overflow-y-auto mb-4 border border-gray-200">
-                <p class="text-slate-500 italic text-sm">Salut, sunt MimiFiscal, asistentul tău digital. Întreabă-mă orice despre impozite și formulare fiscale!</p>
-            </div>
-            <div class="flex space-x-3">
-                <input type="text" id="user-input" placeholder="Scrie întrebarea ta..." class="flex-grow px-4 py-3 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500">
-                <button id="send-button" class="bg-blue-700 text-white px-6 py-3 rounded-full hover:bg-blue-800 transition transform hover:scale-105 shadow-md flex items-center justify-center">
-                  Trimite
-                </button>
-            </div>
-            <div id="loading-indicator" class="hidden mt-3 text-sm text-slate-500 text-center">
-                Se procesează...
-            </div>
-        </div>
+    </div>
+  </section>
+
+  <hr class="my-10 max-w-7xl mx-auto border-gray-300">
+
+  <section id="demo" class="py-20 px-6 bg-gray-100">
+    <div class="max-w-4xl mx-auto text-center">
+      <h3 class="text-3xl md:text-4xl font-bold mb-4 text-slate-800">💬 AI Fiscal</h3>
+      <p class="text-lg text-slate-600 mb-8">Întreabă robotul fiscal ce formular ai nevoie și ce taxe poți deduce.</p>
+      <div class="bg-white p-8 rounded-2xl shadow-lg hover:shadow-xl transition-shadow text-left">
+          <div id="chat-container" class="bg-gray-50 p-4 rounded-xl h-96 overflow-y-auto mb-4 border border-gray-200">
+              <p class="text-slate-500 italic text-sm">Salut, sunt MimiFiscal, asistentul tău digital. Întreabă-mă orice despre impozite și formulare fiscale!</p>
+          </div>
+          <div class="flex space-x-3">
+              <input type="text" id="user-input" placeholder="Scrie întrebarea ta..." class="flex-grow px-4 py-3 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500">
+              <button id="send-button" class="bg-blue-700 text-white px-6 py-3 rounded-full hover:bg-blue-800 transition transform hover:scale-105 shadow-md flex items-center justify-center">
+                Trimite
+              </button>
+          </div>
+          <div id="loading-indicator" class="hidden mt-3 text-sm text-slate-500 text-center">
+              Se procesează...
+          </div>
       </div>
     </div>
   </section>
@@ -129,7 +129,7 @@
     const loadingIndicator = document.getElementById('loading-indicator');
     const tryFreeButton = document.getElementById('try-free-btn');
     
-    // Cheia API este acum hardcodată direct în cod
+    // Cheia API este hardcodată direct în cod
     const userApiKey = 'AIzaSyCa2sHCmHFlB7v6Fz-U3H07YJczBxGTyXw';
 
     function addMessage(text, isUser = false) {
