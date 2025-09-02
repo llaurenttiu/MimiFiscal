@@ -26,7 +26,7 @@
   <section class="bg-blue-50 text-center py-20 px-4">
     <h2 class="text-3xl md:text-4xl font-bold text-blue-900 mb-4">Simplificăm birocrația pentru românii din Germania</h2>
     <p class="text-lg text-gray-700 mb-6">Formulare fiscale, Kindergeld, dublă impozitare, totul completat automat și explicat simplu.</p>
-    <a href="#demo" class="bg-blue-700 text-white px-8 py-3 rounded-full text-base font-medium hover:bg-blue-800 transition">Încearcă gratuit</a>
+    <a href="#demo" id="try-free-btn" class="bg-blue-700 text-white px-8 py-3 rounded-full text-base font-medium hover:bg-blue-800 transition">Încearcă gratuit</a>
   </section>
 
   <section id="servicii" class="py-16 px-6 text-center">
@@ -90,19 +90,20 @@
   </footer>
 
   <script>
-    // JavaScript pentru asistentul fiscal AI
     const userInput = document.getElementById('user-input');
     const sendButton = document.getElementById('send-button');
     const chatContainer = document.getElementById('chat-container');
     const loadingIndicator = document.getElementById('loading-indicator');
+    
+    // Adaugă un ID butonului "Încearcă gratuit" pentru a-l selecta mai ușor
+    const tryFreeButton = document.getElementById('try-free-btn');
 
-    // Funcție pentru a adăuga un mesaj în containerul de chat
     function addMessage(text, isUser = false) {
       const messageDiv = document.createElement('div');
       messageDiv.className = `p-2 my-2 rounded-lg max-w-sm ${isUser ? 'bg-blue-100 text-right self-end' : 'bg-gray-200 self-start'}`;
       messageDiv.textContent = text;
       chatContainer.appendChild(messageDiv);
-      chatContainer.scrollTop = chatContainer.scrollHeight; // Auto-scroll la cel mai nou mesaj
+      chatContainer.scrollTop = chatContainer.scrollHeight;
     }
 
     sendButton.addEventListener('click', async () => {
@@ -151,8 +152,10 @@
       }
     });
 
-    // Activează automat cursorul în câmpul de intrare atunci când pagina se încarcă
-    userInput.focus();
+    // Activează cursorul în câmpul de chat doar atunci când se dă click pe butonul de testare.
+    tryFreeButton.addEventListener('click', () => {
+      userInput.focus();
+    });
   </script>
 </body>
 </html>
