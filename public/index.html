@@ -5,87 +5,253 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>MimiFiscal – Asistent fiscal digital</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    .hero-gradient {
+        background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+    }
+  </style>
 </head>
-<body class="bg-gray-100 flex items-center justify-center min-h-screen">
-  <div class="w-full max-w-2xl bg-white rounded-2xl shadow-lg flex flex-col h-[80vh]">
-    
-    <!-- Header -->
-    <div class="px-4 py-3 bg-blue-600 text-white rounded-t-2xl">
-      <h1 class="text-xl font-bold">MimiFiscal – Asistent fiscal digital</h1>
-      <p class="text-sm opacity-80">Întreabă-mă orice despre taxe și impozite România/Germania</p>
-    </div>
+<body class="bg-gray-100 text-slate-800">
 
-    <!-- Chat messages -->
-    <div id="chatBox" class="flex-1 overflow-y-auto p-4 space-y-3 bg-gray-50"></div>
-
-    <!-- Input -->
-    <div class="p-3 border-t flex items-center gap-2">
-      <input id="userInput" type="text" placeholder="Scrie întrebarea ta..."
-        class="flex-1 border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"/>
-      <button id="sendBtn" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
-        Trimite
-      </button>
+  <header class="bg-white border-b border-gray-200 shadow-sm sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+      <a href="#" class="text-xl font-bold text-blue-700 hover:text-blue-900 transition-colors">MimiFiscal</a>
+      <nav class="space-x-6 hidden md:flex text-sm font-medium text-slate-600">
+        <a href="#servicii" class="hover:text-blue-700 transition-colors">Servicii</a>
+        <a href="#doneaza" class="hover:text-blue-700 transition-colors">Donații</a>
+        <a href="#contact" class="hover:text-blue-700 transition-colors">Contact</a>
+      </nav>
     </div>
-  </div>
+  </header>
+
+  <section class="hero-gradient text-center py-24 px-4 relative overflow-hidden">
+    <div class="max-w-4xl mx-auto relative z-10">
+      <h2 class="text-4xl md:text-5xl font-extrabold text-blue-900 mb-6 leading-tight">
+        Simplificăm birocrația pentru românii din Germania
+      </h2>
+      <p class="text-lg md:text-xl text-slate-700 mb-8">
+        Formulare fiscale, Kindergeld, dublă impozitare, totul completat automat și explicat simplu.
+      </p>
+      <a href="#demo" id="try-free-btn" class="bg-blue-700 text-white px-10 py-4 rounded-full text-base font-semibold hover:bg-blue-800 transition transform hover:scale-105 shadow-lg">
+        Încearcă gratuit
+      </a>
+    </div>
+    <div class="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-gray-100 to-transparent"></div>
+  </section>
+
+  <section id="servicii" class="py-20 px-6 bg-gray-100">
+    <div class="text-center mb-12">
+      <h3 class="text-3xl md:text-4xl font-bold text-slate-800 mb-4">Ce oferim</h3>
+      <p class="text-lg text-slate-600">Servicii digitale create special pentru nevoile tale.</p>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-7xl mx-auto">
+      <div class="bg-white p-8 rounded-2xl shadow-lg hover:shadow-xl transition-shadow flex flex-col items-center text-center">
+        <div class="bg-green-100 text-green-700 rounded-full p-4 mb-4">
+          <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"></path><path fill-rule="evenodd" d="M4 5a2 2 0 012-2h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V15a2 2 0 01-2 2h-2.586a1 1 0 01-.707-.293l-3.414-3.414A1 1 0 015 11.586V7a2 2 0 012-2h2.586zM8 7a1 1 0 011-1h1.586a1 1 0 01.707.293l3.414 3.414A1 1 0 0115 11.586V15a1 1 0 01-1 1h-2a1 1 0 01-1-1v-4a1 1 0 00-1-1h-2a1 1 0 00-1 1v4a1 1 0 01-1 1H4a1 1 0 01-1-1v-4.414a1 1 0 01.293-.707l3.414-3.414A1 1 0 018 7z" clip-rule="evenodd"></path></svg>
+        </div>
+        <h4 class="text-xl font-semibold mb-2 text-slate-900">📄 Formular ANAF</h4>
+        <p class="text-base text-slate-600 mb-6">Evită dubla impozitare DE-RO: Completare + generare PDF</p>
+        <a href="assets/Fiscalresidence .pdf" download="Fiscalresidence.pdf" class="mt-auto bg-blue-600 text-white px-8 py-3 rounded-full hover:bg-blue-700 transition transform hover:-translate-y-1 inline-block font-semibold">
+          Descarcă
+        </a>
+      </div>
+      <div class="bg-white p-8 rounded-2xl shadow-lg hover:shadow-xl transition-shadow flex flex-col items-center text-center">
+        <div class="bg-yellow-100 text-yellow-700 rounded-full p-4 mb-4">
+          <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10 2a1 1 0 00-1 1v1a1 1 0 002 0V3a1 1 0 00-1-1zM5.05 4.05a1 1 0 00-1.414 1.414L4.343 5.757a1 1 0 001.414-1.414L5.05 4.05zM16 10a1 1 0 01-1 1h-1a1 1 0 110-2h1a1 1 0 011 1zM4 10a1 1 0 01-1 1H2a1 1 0 110-2h1a1 1 0 011 1zM15.05 15.05a1 1 0 00-1.414-1.414l-.707.707a1 1 0 001.414 1.414l.707-.707zM5.757 15.757a1 1 0 00-1.414-1.414l-.707.707a1 1 0 001.414 1.414l.707-.707zM10 16a1 1 0 01-1 1v1a1 1 0 11-2 0v-1a1 1 0 011-1z"></path><path fill-rule="evenodd" d="M10 4a6 6 0 100 12 6 6 0 000-12zM5.5 10a4.5 4.5 0 119 0 4.5 4.5 0 01-9 0z" clip-rule="evenodd"></path></svg>
+        </div>
+        <h4 class="text-xl font-semibold mb-2 text-slate-900">👨‍👩‍👧 Kindergeld</h4>
+        <p class="text-base text-slate-600 mb-6">Cerere automată + traducere în română. Ghid complet pas cu pas.</p>
+        <a href="https://www.arbeitsagentur.de/familie-und-kinder/downloads-familie-und-kinder/formulare-kindergeld" target="_blank" rel="noopener noreferrer" class="mt-auto bg-blue-600 text-white px-8 py-3 rounded-full hover:bg-blue-700 transition transform hover:-translate-y-1 inline-block font-semibold">
+          Accesează
+        </a>
+      </div>
+      <div id="demo" class="bg-white p-8 rounded-2xl shadow-lg hover:shadow-xl transition-shadow flex flex-col text-center">
+        <div class="bg-blue-100 text-blue-700 rounded-full p-4 mb-4">
+          <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"></path><path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"></path></svg>
+        </div>
+        <h4 class="text-xl font-semibold mb-2 text-slate-900">💬 AI Fiscal</h4>
+        <p class="text-base text-slate-600 mb-4">Întreabă robotul fiscal ce formular ai nevoie și ce taxe poți deduce.</p>
+        <div class="mt-auto bg-gray-50 p-6 rounded-xl text-left shadow-inner">
+            <h4 class="text-lg font-bold mb-2 text-blue-800">Testează-l aici:</h4>
+            <div id="api-key-container" class="mb-4">
+              <label for="api-key-input" class="block text-sm font-medium text-slate-700 mb-1">
+                Introdu cheia API pentru a continua:
+              </label>
+              <div class="flex space-x-2">
+                <input type="password" id="api-key-input" placeholder="Cheia ta API aici..." class="flex-grow px-4 py-3 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <button id="save-api-key-btn" class="bg-green-600 text-white px-6 py-3 rounded-full hover:bg-green-700 transition transform hover:scale-105 shadow-md flex items-center justify-center">
+                  Salvează
+                </button>
+              </div>
+              <p id="api-key-message" class="text-xs mt-1 text-slate-500">
+                Cheia va fi salvată doar pe acest dispozitiv. Nu o împărți cu nimeni!
+              </p>
+            </div>
+            <div id="chat-container" class="bg-white p-4 rounded-xl h-48 overflow-y-auto mb-4 border border-gray-200">
+                <p class="text-slate-500 italic text-sm">Salut, sunt MimiFiscal, asistentul tău digital. Întreabă-mă orice despre impozite și formulare fiscale!</p>
+            </div>
+            <div class="flex space-x-3">
+                <input type="text" id="user-input" placeholder="Scrie întrebarea ta..." class="flex-grow px-4 py-3 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500" disabled>
+                <button id="send-button" class="bg-blue-700 text-white px-6 py-3 rounded-full hover:bg-blue-800 transition transform hover:scale-105 shadow-md flex items-center justify-center" disabled>
+                    Trimite
+                </button>
+            </div>
+            <div id="loading-indicator" class="hidden mt-3 text-sm text-slate-500 text-center">
+                Se procesează...
+            </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="doneaza" class="py-20 px-6 bg-blue-50 text-center">
+    <div class="max-w-4xl mx-auto">
+      <h3 class="text-3xl md:text-4xl font-bold mb-4 text-slate-800">Susține-ne munca!</h3>
+      <p class="text-lg text-slate-600 mb-8">
+        Dacă ești mulțumit de serviciile gratuite, ne poți susține munca printr-o mică donație. Fiecare contribuție ne ajută să menținem platforma activă și să dezvoltăm noi funcționalități.
+      </p>
+      <div class="flex items-center justify-center space-x-6 mx-auto">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/b/b5/PayPal.svg" alt="PayPal Logo" class="w-28 h-auto opacity-80">
+        <a href="https://paypal.me/Laurdur" target="_blank" rel="noopener noreferrer" class="bg-blue-700 text-white px-10 py-4 rounded-full text-base font-semibold hover:bg-blue-800 transition transform hover:scale-105 shadow-lg">
+          Donează acum
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact" class="py-20 text-center bg-white">
+    <div class="max-w-xl mx-auto">
+      <h3 class="text-3xl font-bold mb-4 text-slate-800">Ai întrebări?</h3>
+      <p class="text-lg text-slate-600 mb-8">Scrie-ne pe <strong class="text-blue-600">contact@mimifiscal.com</strong> sau WhatsApp și te ajutăm rapid.</p>
+      <a href="mailto:contact@mimifiscal.com" class="text-blue-700 text-lg font-medium hover:underline transition-colors">Trimite email</a>
+    </div>
+  </section>
+
+  <footer class="bg-slate-800 text-white py-6 text-center text-sm">
+    <div class="max-w-7xl mx-auto px-6">
+      © 2025 MimiFiscal · Operat de [Numele firmei] · GDPR Compliant · Made in 🇩🇪 + 🇷🇴
+    </div>
+  </footer>
 
   <script>
-    const chatBox = document.getElementById("chatBox");
-    const userInput = document.getElementById("userInput");
-    const sendBtn = document.getElementById("sendBtn");
+    const userInput = document.getElementById('user-input');
+    const sendButton = document.getElementById('send-button');
+    const chatContainer = document.getElementById('chat-container');
+    const loadingIndicator = document.getElementById('loading-indicator');
+    const tryFreeButton = document.getElementById('try-free-btn');
+    const apiKeyInput = document.getElementById('api-key-input');
+    const saveApiKeyButton = document.getElementById('save-api-key-btn');
+    const apiKeyMessage = document.getElementById('api-key-message');
+    
+    let userApiKey = '';
 
-    // Funcție pentru a adăuga mesaje în chat
-    function addMessage(text, isUser) {
-      const msg = document.createElement("div");
-      msg.className = `p-3 rounded-xl max-w-[75%] break-words ${
-        isUser ? "bg-blue-500 text-white ml-auto" : "bg-gray-200 text-gray-900"
-      }`;
-      msg.textContent = text;
-      chatBox.appendChild(msg);
-      chatBox.scrollTop = chatBox.scrollHeight;
-    }
-
-    // Funcția de trimitere mesaj
-    async function sendMessage() {
-      const userQuery = userInput.value.trim();
-      if (!userQuery) return;
-      addMessage(userQuery, true);
-      userInput.value = "";
-
-      // mesaj de încărcare
-      const loadingMsg = document.createElement("div");
-      loadingMsg.className = "p-3 rounded-xl bg-gray-300 text-gray-700";
-      loadingMsg.textContent = "Se gândește...";
-      chatBox.appendChild(loadingMsg);
-      chatBox.scrollTop = chatBox.scrollHeight;
-
-      try {
-        const response = await fetch("/api/chat", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ prompt: userQuery }),
-        });
-
-        const result = await response.json();
-        loadingMsg.remove();
-
-        const text =
-          result?.candidates?.[0]?.content?.parts?.[0]?.text ||
-          result?.error ||
-          "Nu am putut obține un răspuns.";
-        addMessage(text, false);
-      } catch (err) {
-        loadingMsg.remove();
-        addMessage("Eroare: " + err.message, false);
+    function checkApiKey() {
+      const storedKey = localStorage.getItem('gemini-api-key');
+      if (storedKey) {
+        userApiKey = storedKey;
+        apiKeyInput.value = '********' + storedKey.slice(-4);
+        userInput.disabled = false;
+        sendButton.disabled = false;
+        apiKeyMessage.textContent = 'Cheie API salvată. Poți începe conversația!';
+        apiKeyMessage.classList.remove('text-red-500');
+        apiKeyMessage.classList.add('text-green-600');
+      } else {
+        apiKeyMessage.textContent = 'Introdu cheia API pentru a activa chat-ul.';
+        apiKeyMessage.classList.remove('text-green-600');
+        apiKeyMessage.classList.add('text-red-500');
       }
     }
 
-    // Buton click
-    sendBtn.addEventListener("click", sendMessage);
+    function addMessage(text, isUser = false) {
+      const messageDiv = document.createElement('div');
+      messageDiv.className = `p-3 my-2 rounded-xl max-w-[85%] ${isUser ? 'bg-blue-500 text-white ml-auto' : 'bg-gray-200 text-slate-800 mr-auto'}`;
+      messageDiv.textContent = text;
+      chatContainer.appendChild(messageDiv);
+      chatContainer.scrollTop = chatContainer.scrollHeight;
+    }
 
-    // Enter key
-    userInput.addEventListener("keypress", (e) => {
-      if (e.key === "Enter") sendMessage();
+    saveApiKeyButton.addEventListener('click', () => {
+      const key = apiKeyInput.value.trim();
+      if (key) {
+        localStorage.setItem('gemini-api-key', key);
+        checkApiKey();
+      } else {
+        apiKeyMessage.textContent = 'Câmpul pentru cheie API este gol. Te rog să introduci o cheie validă.';
+        apiKeyMessage.classList.remove('text-green-600');
+        apiKeyMessage.classList.add('text-red-500');
+      }
     });
+
+    sendButton.addEventListener('click', async () => {
+        const prompt = userInput.value.trim();
+        if (prompt === '' || !userApiKey) return;
+
+        addMessage(prompt, true);
+        userInput.value = '';
+        loadingIndicator.classList.remove('hidden');
+
+        try {
+            const systemPrompt = "Acționează ca un expert fiscal român specializat pe legislația română și germană, cu accent pe dubla impozitare și beneficii sociale pentru românii din Germania. Răspunde la întrebările utilizatorului într-un mod concis, prietenos și informativ, oferind recomandări generale, dar specificând clar că nu reprezinți un consilier fiscal autorizat. Concentrează-te pe formulare fiscale precum cele de la ANAF și pe proceduri precum Kindergeld. Fii cât mai util și mai simplu.";
+
+            const userQuery = prompt;
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${userApiKey}`;
+
+            const payload = {
+                contents: [{ parts: [{ text: userQuery }] }],
+                tools: [{ "google_search": {} }],
+                systemInstruction: {
+                    parts: [{ text: systemPrompt }]
+                },
+            };
+
+            const response = await fetch(apiUrl, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+
+            if (!response.ok) {
+                const errorText = await response.text();
+                throw new Error(`API response status: ${response.status}. Body: ${errorText}`);
+            }
+
+            const responseText = await response.text();
+            if (!responseText) {
+              throw new Error('Corpul răspunsului de la API este gol.');
+            }
+
+            let result;
+            try {
+              result = JSON.parse(responseText);
+            } catch (jsonError) {
+              throw new Error(`Eroare la parsarea JSON: ${jsonError.message}. Răspuns: ${responseText.substring(0, 100)}...`);
+            }
+
+            const text = result?.candidates?.[0]?.content?.parts?.[0]?.text || 'Nu am putut găsi un răspuns. Te rog să încerci din nou.';
+            addMessage(text, false);
+        } catch (error) {
+            console.error("Eroare la apelul API Gemini:", error);
+            addMessage(`A apărut o eroare la procesarea cererii. Te rog să încerci din nou. Detalii: ${error.message}`, false);
+        } finally {
+            loadingIndicator.classList.add('hidden');
+        }
+    });
+
+    userInput.addEventListener('keydown', (event) => {
+      if (event.key === 'Enter') {
+        sendButton.click();
+      }
+    });
+
+    tryFreeButton.addEventListener('click', () => {
+      setTimeout(() => {
+        apiKeyInput.focus();
+      }, 100); 
+    });
+
+    window.onload = checkApiKey;
   </script>
 </body>
 </html>
