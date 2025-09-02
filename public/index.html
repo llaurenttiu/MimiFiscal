@@ -165,12 +165,28 @@
                 body: JSON.stringify(payload)
             });
 
-            const result = await response.json();
+            if (!response.ok) {
+                const errorText = await response.text();
+                throw new Error(`API response status: ${response.status}. Body: ${errorText}`);
+            }
+
+            const responseText = await response.text();
+            if (!responseText) {
+              throw new Error('Corpul răspunsului de la API este gol.');
+            }
+
+            let result;
+            try {
+              result = JSON.parse(responseText);
+            } catch (jsonError) {
+              throw new Error(`Eroare la parsarea JSON: ${jsonError.message}. Răspuns: ${responseText.substring(0, 100)}...`);
+            }
+
             const text = result?.candidates?.[0]?.content?.parts?.[0]?.text || 'Nu am putut găsi un răspuns. Te rog să încerci din nou.';
             addMessage(text, false);
         } catch (error) {
             console.error("Eroare la apelul API Gemini:", error);
-            addMessage('A apărut o eroare la procesarea cererii. Te rog să încerci din nou.', false);
+            addMessage(`A apărut o eroare la procesarea cererii. Te rog să încerci din nou. Detalii: ${error.message}`, false);
         } finally {
             loadingIndicator.classList.add('hidden');
         }
