@@ -11,9 +11,30 @@
     .hero-gradient {
         background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
     }
+    .glowing-border {
+      position: relative;
+      z-index: 10;
+    }
+    .glowing-border::before {
+      content: '';
+      position: absolute;
+      top: -2px;
+      left: -2px;
+      right: -2px;
+      bottom: -2px;
+      border-radius: 1.5rem;
+      background: linear-gradient(45deg, #4299e1, #667eea, #9f7aea, #d53f8c);
+      z-index: -1;
+      filter: blur(8px);
+      opacity: 0;
+      transition: opacity 0.5s ease-in-out;
+    }
+    .glowing-border.glowing::before {
+      opacity: 1;
+    }
   </style>
 </head>
-<body class="bg-gray-100 text-slate-800">
+<body class="bg-gradient-to-br from-gray-100 to-blue-50 text-slate-800">
 
   <header class="bg-white border-b border-gray-200 shadow-sm sticky top-0 z-50">
     <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
@@ -41,13 +62,13 @@
     <div class="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-gray-100 to-transparent"></div>
   </section>
 
-  <section id="servicii" class="py-20 px-6 bg-gray-100">
+  <section id="servicii" class="py-20 px-6 bg-gradient-to-b from-gray-100 to-white">
     <div class="text-center mb-12">
       <h3 class="text-3xl md:text-4xl font-bold text-slate-800 mb-4">Ce oferim</h3>
       <p class="text-lg text-slate-600">Servicii digitale create special pentru nevoile tale.</p>
     </div>
     <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
-      <div class="bg-white p-8 rounded-2xl shadow-lg hover:shadow-xl transition-shadow flex flex-col items-center text-center">
+      <div class="bg-white p-8 rounded-2xl shadow-lg hover:shadow-xl hover:scale-[1.02] transition-transform duration-300 flex flex-col items-center text-center">
         <div class="bg-green-100 text-green-700 rounded-full p-4 mb-4">
           <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"></path><path fill-rule="evenodd" d="M4 5a2 2 0 012-2h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V15a2 2 0 01-2 2h-2.586a1 1 0 01-.707-.293l-3.414-3.414A1 1 0 015 11.586V7a2 2 0 012-2h2.586zM8 7a1 1 0 011-1h1.586a1 1 0 01.707.293l3.414 3.414A1 1 0 0115 11.586V15a1 1 0 01-1 1h-2a1 1 0 01-1-1v-4a1 1 0 00-1-1h-2a1 1 0 00-1 1v4a1 1 0 01-1 1H4a1 1 0 01-1-1v-4.414a1 1 0 01.293-.707l3.414-3.414A1 1 0 018 7z" clip-rule="evenodd"></path></svg>
         </div>
@@ -57,7 +78,7 @@
           Descarcă
         </a>
       </div>
-      <div class="bg-white p-8 rounded-2xl shadow-lg hover:shadow-xl transition-shadow flex flex-col items-center text-center">
+      <div class="bg-white p-8 rounded-2xl shadow-lg hover:shadow-xl hover:scale-[1.02] transition-transform duration-300 flex flex-col items-center text-center">
         <div class="bg-yellow-100 text-yellow-700 rounded-full p-4 mb-4">
           <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10 2a1 1 0 00-1 1v1a1 1 0 002 0V3a1 1 0 00-1-1zM5.05 4.05a1 1 0 00-1.414 1.414L4.343 5.757a1 1 0 001.414-1.414L5.05 4.05zM16 10a1 1 0 01-1 1h-1a1 1 0 110-2h1a1 1 0 011 1zM4 10a1 1 0 01-1 1H2a1 1 0 110-2h1a1 1 0 011 1zM15.05 15.05a1 1 0 00-1.414-1.414l-.707.707a1 1 0 001.414 1.414l.707-.707zM5.757 15.757a1 1 0 00-1.414-1.414l-.707.707a1 1 0 001.414 1.414l.707-.707zM10 16a1 1 0 01-1 1v1a1 1 0 11-2 0v-1a1 1 0 011-1z"></path><path fill-rule="evenodd" d="M10 4a6 6 0 100 12 6 6 0 000-12zM5.5 10a4.5 4.5 0 119 0 4.5 4.5 0 01-9 0z" clip-rule="evenodd"></path></svg>
         </div>
@@ -72,11 +93,11 @@
 
   <hr class="my-10 max-w-7xl mx-auto border-gray-300">
 
-  <section id="demo" class="py-20 px-6 bg-gray-100">
+  <section id="demo" class="py-20 px-6 bg-gradient-to-b from-blue-100 to-white">
     <div class="max-w-4xl mx-auto text-center">
       <h3 class="text-3xl md:text-4xl font-bold mb-4 text-slate-800">💬 AI Fiscal</h3>
       <p class="text-lg text-slate-600 mb-8">Întreabă robotul fiscal ce formular ai nevoie și ce taxe poți deduce.</p>
-      <div class="bg-white p-8 rounded-2xl shadow-lg hover:shadow-xl transition-shadow text-left">
+      <div class="bg-white p-8 rounded-2xl shadow-lg glowing-border text-left">
           <div id="chat-container" class="bg-gray-50 p-4 rounded-xl h-96 overflow-y-auto mb-4 border border-gray-200">
               <p class="text-slate-500 italic text-sm">Salut, sunt MimiFiscal, asistentul tău digital. Întreabă-mă orice despre impozite și formulare fiscale!</p>
           </div>
@@ -93,7 +114,7 @@
     </div>
   </section>
 
-  <section id="doneaza" class="py-20 px-6 bg-blue-50 text-center">
+  <section id="doneaza" class="py-20 px-6 bg-gradient-to-b from-blue-50 to-white text-center">
     <div class="max-w-4xl mx-auto">
       <h3 class="text-3xl md:text-4xl font-bold mb-4 text-slate-800">Susține-ne munca!</h3>
       <p class="text-lg text-slate-600 mb-8">
@@ -108,7 +129,7 @@
     </div>
   </section>
 
-  <section id="contact" class="py-20 text-center bg-white">
+  <section id="contact" class="py-20 text-center bg-gradient-to-b from-white to-gray-100">
     <div class="max-w-xl mx-auto">
       <h3 class="text-3xl font-bold mb-4 text-slate-800">Ai întrebări?</h3>
       <p class="text-lg text-slate-600 mb-8">Scrie-ne pe <strong class="text-blue-600">contact@mimifiscal.com</strong> sau WhatsApp și te ajutăm rapid.</p>
@@ -128,6 +149,7 @@
     const chatContainer = document.getElementById('chat-container');
     const loadingIndicator = document.getElementById('loading-indicator');
     const tryFreeButton = document.getElementById('try-free-btn');
+    const chatCard = document.querySelector('#demo .bg-white');
     
     // Cheia API este hardcodată direct în cod
     const userApiKey = 'AIzaSyCa2sHCmHFlB7v6Fz-U3H07YJczBxGTyXw';
@@ -139,6 +161,14 @@
       chatContainer.appendChild(messageDiv);
       chatContainer.scrollTop = chatContainer.scrollHeight;
     }
+    
+    chatCard.addEventListener('mouseenter', () => {
+      chatCard.classList.add('glowing');
+    });
+
+    chatCard.addEventListener('mouseleave', () => {
+      chatCard.classList.remove('glowing');
+    });
 
     sendButton.addEventListener('click', async () => {
         const prompt = userInput.value.trim();
@@ -202,7 +232,6 @@
     });
 
     tryFreeButton.addEventListener('click', () => {
-      // Nothing needed here, as the chat is now always active
       setTimeout(() => {
         userInput.focus();
       }, 100); 
