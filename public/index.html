@@ -75,26 +75,13 @@
         <p class="text-base text-slate-600 mb-4">Întreabă robotul fiscal ce formular ai nevoie și ce taxe poți deduce.</p>
         <div class="mt-auto bg-gray-50 p-6 rounded-xl text-left shadow-inner">
             <h4 class="text-lg font-bold mb-2 text-blue-800">Testează-l aici:</h4>
-            <div id="api-key-container" class="mb-4">
-              <label for="api-key-input" class="block text-sm font-medium text-slate-700 mb-1">
-                Introdu cheia API pentru a continua:
-              </label>
-              <div class="flex space-x-2">
-                <input type="password" id="api-key-input" placeholder="Cheia ta API aici..." class="flex-grow px-4 py-3 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500">
-                <button id="save-api-key-btn" class="bg-green-600 text-white px-6 py-3 rounded-full hover:bg-green-700 transition transform hover:scale-105 shadow-md flex items-center justify-center">
-                  Salvează
-                </button>
-              </div>
-              <p id="api-key-message" class="text-xs mt-1 text-slate-500">
-                Cheia va fi salvată doar pe acest dispozitiv. Nu o împărți cu nimeni!
-              </p>
-            </div>
+            <!-- Câmpul pentru cheia API și butonul Salvează au fost ascunse -->
             <div id="chat-container" class="bg-white p-4 rounded-xl h-48 overflow-y-auto mb-4 border border-gray-200">
                 <p class="text-slate-500 italic text-sm">Salut, sunt MimiFiscal, asistentul tău digital. Întreabă-mă orice despre impozite și formulare fiscale!</p>
             </div>
             <div class="flex space-x-3">
-                <input type="text" id="user-input" placeholder="Scrie întrebarea ta..." class="flex-grow px-4 py-3 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500" disabled>
-                <button id="send-button" class="bg-blue-700 text-white px-6 py-3 rounded-full hover:bg-blue-800 transition transform hover:scale-105 shadow-md flex items-center justify-center" disabled>
+                <input type="text" id="user-input" placeholder="Scrie întrebarea ta..." class="flex-grow px-4 py-3 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <button id="send-button" class="bg-blue-700 text-white px-6 py-3 rounded-full hover:bg-blue-800 transition transform hover:scale-105 shadow-md flex items-center justify-center">
                   Trimite
                 </button>
             </div>
@@ -141,31 +128,9 @@
     const chatContainer = document.getElementById('chat-container');
     const loadingIndicator = document.getElementById('loading-indicator');
     const tryFreeButton = document.getElementById('try-free-btn');
-    const apiKeyInput = document.getElementById('api-key-input');
-    const saveApiKeyButton = document.getElementById('save-api-key-btn');
-    const apiKeyMessage = document.getElementById('api-key-message');
     
-    let userApiKey = '';
-
-    function checkApiKey() {
-      const storedKey = localStorage.getItem('gemini-api-key');
-      if (storedKey) {
-        userApiKey = storedKey;
-        // Afisăm doar o versiune mascată a cheii pentru securitate
-        apiKeyInput.value = '********' + storedKey.slice(-4);
-        userInput.disabled = false;
-        sendButton.disabled = false;
-        apiKeyMessage.textContent = 'Cheie API salvată. Poți începe conversația!';
-        apiKeyMessage.classList.remove('text-red-500');
-        apiKeyMessage.classList.add('text-green-600');
-      } else {
-        userInput.disabled = true;
-        sendButton.disabled = true;
-        apiKeyMessage.textContent = 'Introdu cheia API pentru a activa chat-ul.';
-        apiKeyMessage.classList.remove('text-green-600');
-        apiKeyMessage.classList.add('text-red-500');
-      }
-    }
+    // Cheia API este acum hardcodată direct în cod
+    const userApiKey = 'AIzaSyCa2sHCmHFlB7v6Fz-U3H07YJczBxGTyXw';
 
     function addMessage(text, isUser = false) {
       const messageDiv = document.createElement('div');
@@ -175,33 +140,9 @@
       chatContainer.scrollTop = chatContainer.scrollHeight;
     }
 
-    saveApiKeyButton.addEventListener('click', () => {
-        const key = apiKeyInput.value.trim();
-        // Verificăm dacă utilizatorul a introdus o cheie nouă sau dacă a lăsat-o pe cea mascată
-        if (key && !key.startsWith('********')) {
-            localStorage.setItem('gemini-api-key', key);
-            checkApiKey();
-        } else if (!key) {
-            apiKeyMessage.textContent = 'Câmpul pentru cheie API este gol. Te rog să introduci o cheie validă.';
-            apiKeyMessage.classList.remove('text-green-600');
-            apiKeyMessage.classList.add('text-red-500');
-        } else {
-            // Dacă utilizatorul a lăsat cheia mascată și încearcă să o "salveze", nu facem nimic
-            apiKeyMessage.textContent = 'Cheia API este deja salvată. Nu este necesar să o salvezi din nou.';
-            apiKeyMessage.classList.remove('text-green-600');
-            apiKeyMessage.classList.add('text-blue-500');
-        }
-    });
-
     sendButton.addEventListener('click', async () => {
         const prompt = userInput.value.trim();
         if (prompt === '') return;
-
-        // Folosim direct variabila userApiKey care este deja populată din localStorage
-        if (!userApiKey) {
-            addMessage('Te rog să introduci o cheie API validă pentru a folosi chat-ul.', false);
-            return;
-        }
 
         addMessage(prompt, true);
         userInput.value = '';
@@ -261,12 +202,11 @@
     });
 
     tryFreeButton.addEventListener('click', () => {
+      // Nothing needed here, as the chat is now always active
       setTimeout(() => {
-        apiKeyInput.focus();
+        userInput.focus();
       }, 100); 
     });
-
-    window.onload = checkApiKey;
   </script>
 </body>
 </html>
