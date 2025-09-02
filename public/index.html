@@ -95,7 +95,7 @@
             <div class="flex space-x-3">
                 <input type="text" id="user-input" placeholder="Scrie întrebarea ta..." class="flex-grow px-4 py-3 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500" disabled>
                 <button id="send-button" class="bg-blue-700 text-white px-6 py-3 rounded-full hover:bg-blue-800 transition transform hover:scale-105 shadow-md flex items-center justify-center" disabled>
-                    Trimite
+                  Trimite
                 </button>
             </div>
             <div id="loading-indicator" class="hidden mt-3 text-sm text-slate-500 text-center">
@@ -151,6 +151,7 @@
       const storedKey = localStorage.getItem('gemini-api-key');
       if (storedKey) {
         userApiKey = storedKey;
+        // Afisăm doar o versiune mascată a cheii pentru securitate
         apiKeyInput.value = '********' + storedKey.slice(-4);
         userInput.disabled = false;
         sendButton.disabled = false;
@@ -158,6 +159,8 @@
         apiKeyMessage.classList.remove('text-red-500');
         apiKeyMessage.classList.add('text-green-600');
       } else {
+        userInput.disabled = true;
+        sendButton.disabled = true;
         apiKeyMessage.textContent = 'Introdu cheia API pentru a activa chat-ul.';
         apiKeyMessage.classList.remove('text-green-600');
         apiKeyMessage.classList.add('text-red-500');
@@ -173,20 +176,32 @@
     }
 
     saveApiKeyButton.addEventListener('click', () => {
-      const key = apiKeyInput.value.trim();
-      if (key) {
-        localStorage.setItem('gemini-api-key', key);
-        checkApiKey();
-      } else {
-        apiKeyMessage.textContent = 'Câmpul pentru cheie API este gol. Te rog să introduci o cheie validă.';
-        apiKeyMessage.classList.remove('text-green-600');
-        apiKeyMessage.classList.add('text-red-500');
-      }
+        const key = apiKeyInput.value.trim();
+        // Verificăm dacă utilizatorul a introdus o cheie nouă sau dacă a lăsat-o pe cea mascată
+        if (key && !key.startsWith('********')) {
+            localStorage.setItem('gemini-api-key', key);
+            checkApiKey();
+        } else if (!key) {
+            apiKeyMessage.textContent = 'Câmpul pentru cheie API este gol. Te rog să introduci o cheie validă.';
+            apiKeyMessage.classList.remove('text-green-600');
+            apiKeyMessage.classList.add('text-red-500');
+        } else {
+            // Dacă utilizatorul a lăsat cheia mascată și încearcă să o "salveze", nu facem nimic
+            apiKeyMessage.textContent = 'Cheia API este deja salvată. Nu este necesar să o salvezi din nou.';
+            apiKeyMessage.classList.remove('text-green-600');
+            apiKeyMessage.classList.add('text-blue-500');
+        }
     });
 
     sendButton.addEventListener('click', async () => {
         const prompt = userInput.value.trim();
-        if (prompt === '' || !userApiKey) return;
+        if (prompt === '') return;
+
+        // Folosim direct variabila userApiKey care este deja populată din localStorage
+        if (!userApiKey) {
+            addMessage('Te rog să introduci o cheie API validă pentru a folosi chat-ul.', false);
+            return;
+        }
 
         addMessage(prompt, true);
         userInput.value = '';
