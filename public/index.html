@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>MimiFiscal – Asistent fiscal digital</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen">
+  <div class="w-full max-w-2xl bg-white rounded-2xl shadow-lg flex flex-col h-[80vh]">
+    
+    <!-- Header -->
+    <div class="px-4 py-3 bg-blue-600 text-white rounded-t-2xl">
+      <h1 class="text-xl font-bold">MimiFiscal – Asistent fiscal digital</h1>
+      <p class="text-sm opacity-80">Întreabă-mă orice despre taxe și impozite România/Germania</p>
+    </div>
+
+    <!-- Chat messages -->
+    <div id="chatBox" class="flex-1 overflow-y-auto p-4 space-y-3 bg-gray-50"></div>
+
+    <!-- Input -->
+    <div class="p-3 border-t flex items-center gap-2">
+      <input id="userInput" type="text" placeholder="Scrie întrebarea ta..."
+        class="flex-1 border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"/>
+      <button id="sendBtn" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
+        Trimite
+      </button>
+    </div>
+  </div>
+
+  <script>
+    const chatBox = document.getElementById("chatBox");
+    const userInput = document.getElementById("userInput");
+    const sendBtn = document.getElementById("sendBtn");
+
+    // Funcție pentru a adăuga mesaje în chat
+    function addMessage(text, isUser) {
+      const msg = document.createElement("div");
+      msg.className = `p-3 rounded-xl max-w-[75%] break-words ${
+        isUser ? "bg-blue-500 text-white ml-auto" : "bg-gray-200 text-gray-900"
+      }`;
+      msg.textContent = text;
+      chatBox.appendChild(msg);
+      chatBox.scrollTop = chatBox.scrollHeight;
+    }
+
+    // Funcția de trimitere mesaj
+    async function sendMessage() {
+      const userQuery = userInput.value.trim();
+      if (!userQuery) return;
+      addMessage(userQuery, true);
+      userInput.value = "";
+
+      // mesaj de încărcare
+      const loadingMsg = document.createElement("div");
+      loadingMsg.className = "p-3 rounded-xl bg-gray-300 text-gray-700";
+      loadingMsg.textContent = "Se gândește...";
+      chatBox.appendChild(loadingMsg);
+      chatBox.scrollTop = chatBox.scrollHeight;
+
+      try {
+        const response = await fetch("/api/chat", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ prompt: userQuery }),
+        });
+
+        const result = await response.json();
+        loadingMsg.remove();
+
+        const text =
+          result?.candidates?.[0]?.content?.parts?.[0]?.text ||
+          result?.error ||
+          "Nu am putut obține un răspuns.";
+        addMessage(text, false);
+      } catch (err) {
+        loadingMsg.remove();
+        addMessage("Eroare: " + err.message, false);
+      }
+    }
+
+    // Buton click
+    sendBtn.addEventListener("click", sendMessage);
+
+    // Enter key
+    userInput.addEventListener("keypress", (e) => {
+      if (e.key === "Enter") sendMessage();
+    });
+  </script>
+</body>
+</html>
