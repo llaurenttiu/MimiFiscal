@@ -42,16 +42,13 @@
       <div class="bg-green-50 p-6 rounded-xl shadow hover:shadow-md transition flex flex-col items-center">
         <h4 class="text-lg font-semibold mb-2">👨‍👩‍👧 Kindergeld</h4>
         <p class="text-sm text-gray-600 mb-4">Cerere automată + traducere în română. Ghid complet pas cu pas.</p>
-        <!-- Noul link care duce la pagina de formulare oficială -->
         <a href="https://www.arbeitsagentur.de/familie-und-kinder/downloads-familie-und-kinder/formulare-kindergeld" target="_blank" rel="noopener noreferrer" class="mt-auto bg-blue-600 text-white px-6 py-2 rounded-full hover:bg-blue-700 transition inline-block text-center">
           Accesează pagina de formulare KG1
         </a>
       </div>
-      <!-- Adaugat id="demo" pentru a face legatura cu butonul "Încearcă gratuit" -->
       <div id="demo" class="bg-green-50 p-6 rounded-xl shadow hover:shadow-md transition">
         <h4 class="text-lg font-semibold mb-2">💬 AI Fiscal</h4>
         <p class="text-sm text-gray-600">Întreabă robotul fiscal ce formular ai nevoie și ce taxe poți deduce.</p>
-        <!-- Secțiunea pentru asistentul fiscal AI -->
         <div class="mt-4 bg-gray-100 p-4 rounded-xl text-left shadow">
             <h4 class="text-md font-semibold mb-2 text-blue-800">Testează-l aici:</h4>
             <div id="chat-container" class="bg-white p-4 rounded-md h-40 overflow-y-auto mb-2">
@@ -99,13 +96,13 @@
     const chatContainer = document.getElementById('chat-container');
     const loadingIndicator = document.getElementById('loading-indicator');
 
-    // Function to add a message to the chat container
+    // Funcție pentru a adăuga un mesaj în containerul de chat
     function addMessage(text, isUser = false) {
       const messageDiv = document.createElement('div');
       messageDiv.className = `p-2 my-2 rounded-lg max-w-sm ${isUser ? 'bg-blue-100 text-right self-end' : 'bg-gray-200 self-start'}`;
       messageDiv.textContent = text;
       chatContainer.appendChild(messageDiv);
-      chatContainer.scrollTop = chatContainer.scrollHeight; // Auto-scroll to the latest message
+      chatContainer.scrollTop = chatContainer.scrollHeight; // Auto-scroll la cel mai nou mesaj
     }
 
     sendButton.addEventListener('click', async () => {
@@ -153,6 +150,9 @@
         sendButton.click();
       }
     });
+
+    // Activează automat cursorul în câmpul de intrare atunci când pagina se încarcă
+    userInput.focus();
   </script>
 </body>
 </html>
