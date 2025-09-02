@@ -94,8 +94,6 @@
     const sendButton = document.getElementById('send-button');
     const chatContainer = document.getElementById('chat-container');
     const loadingIndicator = document.getElementById('loading-indicator');
-    
-    // Adaugă un ID butonului "Încearcă gratuit" pentru a-l selecta mai ușor
     const tryFreeButton = document.getElementById('try-free-btn');
 
     function addMessage(text, isUser = false) {
@@ -152,9 +150,12 @@
       }
     });
 
-    // Activează cursorul în câmpul de chat doar atunci când se dă click pe butonul de testare.
     tryFreeButton.addEventListener('click', () => {
-      userInput.focus();
+      // Folosim setTimeout pentru a ne asigura că focusul se activează după ce
+      // browserul a terminat de mutat pagina la ancora #demo.
+      setTimeout(() => {
+        userInput.focus();
+      }, 100); 
     });
   </script>
 </body>
