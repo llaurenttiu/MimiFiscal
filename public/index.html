@@ -118,7 +118,7 @@
             <p class="text-lg text-slate-600 mb-8">Întreabă robotul fiscal ce formular ai nevoie și ce taxe poți deduce.</p>
             <div class="bg-white p-8 rounded-2xl shadow-lg glowing-border text-left">
                 <div id="chat-container" class="bg-gray-50 p-4 rounded-xl h-96 overflow-y-auto mb-4 border border-gray-200 chat-container">
-                    <!-- Mesaj initial de la AI -->
+                    <!-- Mesaje initial de la AI -->
                     <div class="message-bubble ai p-3 my-2 rounded-xl max-w-[85%]">
                         Salut, sunt MimiFiscal, asistentul tău digital. Întreabă-mă orice despre impozite și formulare fiscale!
                     </div>
@@ -174,11 +174,21 @@
             const tryFreeButton = document.getElementById('try-free-btn');
             const chatCard = document.querySelector('#demo .bg-white');
 
-            const apiKey = "";
+            // IMPORTANT: This API key is a placeholder. You must replace it with your own key.
+            const apiKey = ""; 
             const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
             const systemPrompt = "Acționează ca un asistent fiscal expert și prietenos pentru românii care locuiesc și lucrează în Germania. Răspunde la întrebări despre impozite, formulare, 'Kindergeld' și alte aspecte fiscale, folosind informații actuale și verificabile. Explică conceptele complexe într-un mod simplu, clar și concis, în limba română. Evită sfaturile financiare personale și recomandă consultarea unui specialist pentru situații complexe.";
             
-            // Function to handle API errors with exponential backoff
+            // Functie pentru a adauga un mesaj in chat
+            function addMessage(text, isUser = false) {
+                const messageDiv = document.createElement('div');
+                messageDiv.className = `p-3 my-2 rounded-xl max-w-[85%] message-bubble ${isUser ? 'user' : 'ai'}`;
+                messageDiv.textContent = text;
+                chatContainer.appendChild(messageDiv);
+                chatContainer.scrollTop = chatContainer.scrollHeight;
+            }
+
+            // Functie pentru a gestiona erorile API si a refuza incercarile
             const fetchWithExponentialBackoff = async (url, options, retries = 3, delay = 1000) => {
                 try {
                     const response = await fetch(url, options);
@@ -197,28 +207,7 @@
                 }
             };
 
-            function addMessage(text, isUser = false) {
-                const messageDiv = document.createElement('div');
-                messageDiv.className = `p-3 my-2 rounded-xl max-w-[85%] message-bubble ${isUser ? 'user' : 'ai'}`;
-                messageDiv.textContent = text;
-                chatContainer.appendChild(messageDiv);
-                chatContainer.scrollTop = chatContainer.scrollHeight;
-            }
-
-            chatCard.addEventListener('mouseenter', () => {
-                chatCard.classList.add('glowing');
-            });
-
-            chatCard.addEventListener('mouseleave', () => {
-                chatCard.classList.remove('glowing');
-            });
-
-            tryFreeButton.addEventListener('click', () => {
-                setTimeout(() => {
-                    userInput.focus();
-                }, 100);
-            });
-
+            // Functie principala pentru a trimite mesajul
             async function sendMessage() {
                 const prompt = userInput.value.trim();
                 if (prompt === '') return;
@@ -264,13 +253,29 @@
                     userInput.focus();
                 }
             }
-
+            
+            // Adauga evenimente
             sendButton.addEventListener('click', sendMessage);
             userInput.addEventListener('keydown', (event) => {
                 if (event.key === 'Enter') {
-                    event.preventDefault(); // Prevents a new line in the input field
+                    event.preventDefault();
                     sendMessage();
                 }
+            });
+
+            // Adauga efectul de glowing pe cardul de chat
+            chatCard.addEventListener('mouseenter', () => {
+                chatCard.classList.add('glowing');
+            });
+            chatCard.addEventListener('mouseleave', () => {
+                chatCard.classList.remove('glowing');
+            });
+
+            // Scroll la sectiunea de chat cand se apasa butonul "Incearca gratuit"
+            tryFreeButton.addEventListener('click', () => {
+                setTimeout(() => {
+                    userInput.focus();
+                }, 100);
             });
         });
     </script>
