@@ -174,11 +174,9 @@
             const tryFreeButton = document.getElementById('try-free-btn');
             const chatCard = document.querySelector('#demo .bg-white');
 
-            // IMPORTANT: This API key is a placeholder. You must replace it with your own key.
-            const apiKey = ""; 
-            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
-            const systemPrompt = "Acționează ca un asistent fiscal expert și prietenos pentru românii care locuiesc și lucrează în Germania. Răspunde la întrebări despre impozite, formulare, 'Kindergeld' și alte aspecte fiscale, folosind informații actuale și verificabile. Explică conceptele complexe într-un mod simplu, clar și concis, în limba română. Evită sfaturile financiare personale și recomandă consultarea unui specialist pentru situații complexe.";
-            
+            // Noul URL al serverului nostru, care va fi procesat de Vercel
+            const serverUrl = '/api/chat';
+
             // Functie pentru a adauga un mesaj in chat
             function addMessage(text, isUser = false) {
                 const messageDiv = document.createElement('div');
@@ -187,25 +185,6 @@
                 chatContainer.appendChild(messageDiv);
                 chatContainer.scrollTop = chatContainer.scrollHeight;
             }
-
-            // Functie pentru a gestiona erorile API si a refuza incercarile
-            const fetchWithExponentialBackoff = async (url, options, retries = 3, delay = 1000) => {
-                try {
-                    const response = await fetch(url, options);
-                    if (response.status === 429 && retries > 0) {
-                        console.log(`Rate limit exceeded. Retrying in ${delay}ms...`);
-                        await new Promise(resolve => setTimeout(resolve, delay));
-                        return fetchWithExponentialBackoff(url, options, retries - 1, delay * 2);
-                    }
-                    if (!response.ok) {
-                        throw new Error(`HTTP error! status: ${response.status}`);
-                    }
-                    return response;
-                } catch (error) {
-                    console.error('Fetch error:', error);
-                    throw error;
-                }
-            };
 
             // Functie principala pentru a trimite mesajul
             async function sendMessage() {
@@ -219,20 +198,22 @@
                 loadingIndicator.classList.remove('hidden');
 
                 const payload = {
-                    contents: [{ parts: [{ text: prompt }] }],
-                    tools: [{ "google_search": {} }],
-                    systemInstruction: {
-                        parts: [{ text: systemPrompt }]
-                    },
+                    prompt: prompt
                 };
 
                 try {
-                    const response = await fetchWithExponentialBackoff(apiUrl, {
+                    // Trimite cererea către serverul tău securizat pe Vercel
+                    const response = await fetch(serverUrl, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify(payload)
                     });
 
+                    if (!response.ok) {
+                        const errorData = await response.json();
+                        throw new Error(`Eroare de server: ${response.status} - ${errorData.error}`);
+                    }
+                    
                     const result = await response.json();
                     const candidate = result.candidates?.[0];
                     let text = 'A apărut o problemă. Te rog să încerci din nou.';
@@ -245,7 +226,7 @@
 
                 } catch (error) {
                     console.error("Eroare la comunicarea cu serverul:", error);
-                    addMessage(`A apărut o eroare la procesarea cererii. Te rog să încerci din nou.`, false);
+                    addMessage(`A apărut o eroare la procesarea cererii: ${error.message}.`, false);
                 } finally {
                     loadingIndicator.classList.add('hidden');
                     userInput.disabled = false;
