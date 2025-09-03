@@ -175,21 +175,46 @@
         userInput.value = '';
         loadingIndicator.classList.remove('hidden');
 
+        // Gemini API configuration
+        const apiKey = "";
+        const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
+
+        // Define the persona and task for the AI in the system instruction
+        const systemPrompt = "Acționează ca un asistent fiscal expert și prietenos pentru românii care locuiesc și lucrează în Germania. Răspunde la întrebări despre impozite, formulare, 'Kindergeld' și alte aspecte fiscale, folosind informații actuale și verificabile. Explică conceptele complexe într-un mod simplu, clar și concis, în limba română. Evită sfaturile financiare personale și recomandă consultarea unui specialist pentru situații complexe.";
+        const userQuery = prompt;
+
+        // Construct the payload for the API request
+        const payload = {
+            contents: [{ parts: [{ text: userQuery }] }],
+            tools: [{ "google_search": {} }],
+            systemInstruction: {
+                parts: [{ text: systemPrompt }]
+            },
+        };
+
         try {
-            const response = await fetch('/api/chat', {
+            const response = await fetch(apiUrl, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ prompt: prompt })
+                body: JSON.stringify(payload)
             });
 
             if (!response.ok) {
                 const errorText = await response.text();
+                console.error("Eroare la apelul API:", response.status, errorText);
                 throw new Error(`Eroare la apelul API: ${response.status}. Detalii: ${errorText}`);
             }
 
             const result = await response.json();
-            const text = result?.text || 'A apărut o problemă. Te rog să încerci din nou.';
+            const candidate = result.candidates?.[0];
+            let text = 'A apărut o problemă. Te rog să încerci din nou.';
+
+            if (candidate && candidate.content?.parts?.[0]?.text) {
+                text = candidate.content.parts[0].text;
+            }
+
             addMessage(text, false);
+
         } catch (error) {
             console.error("Eroare la comunicarea cu serverul:", error);
             addMessage(`A apărut o eroare la procesarea cererii. Te rog să încerci din nou.`, false);
