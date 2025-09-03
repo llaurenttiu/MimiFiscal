@@ -235,19 +235,15 @@
                 // Afiseaza indicatorul de incarcare
                 loadingIndicator.classList.remove('hidden');
                 
-                // === Apel API catre modelul AI real ===
-                const apiKey = ""; // Sistemul va furniza o cheie API in runtime
-                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
-
-                const systemPrompt = "Acționezi ca un asistent fiscal amabil și informat pentru românii care locuiesc și lucrează în Germania. Răspunde la întrebările despre impozite, formulare, taxe și reglementări financiare. Oferă sfaturi concise și utile în limba română.";
-
+                // === Apel API catre functia de server Vercel ===
+                const serverUrl = 'api/chat';
+                
                 const payload = {
-                    contents: [{ parts: [{ text: prompt }] }],
-                    systemInstruction: { parts: [{ text: systemPrompt }] }
+                    prompt: prompt
                 };
 
                 try {
-                    const response = await fetch(apiUrl, {
+                    const response = await fetch(serverUrl, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify(payload)
@@ -258,12 +254,7 @@
                     }
                     
                     const result = await response.json();
-                    const candidate = result.candidates?.[0];
-                    let text = 'Ne pare rău, a apărut o eroare la procesarea cererii tale. Te rugăm să încerci din nou mai târziu.';
-
-                    if (candidate && candidate.content?.parts?.[0]?.text) {
-                        text = candidate.content.parts[0].text;
-                    }
+                    const text = result.text;
 
                     addMessage(text, false);
 
