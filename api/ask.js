@@ -16,8 +16,8 @@ export default async function handler(req, res) {
     const apiKey = process.env.GEMINI_API_KEY; // Accesarea cheii securizate
     const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
 
-    // Am preluat instrucțiunea de sistem din codul tău inițial
-    const systemPrompt = "Acționează ca un expert fiscal român specializat pe legislația română și germană, cu accent pe dubla impozitare și beneficii sociale pentru românii din Germania. Răspunde la întrebările utilizatorului într-un mod concis, prietenos și informativ, oferind recomandări generale, dar specificând clar că nu reprezinți un consilier fiscal autorizat. Concentrează-te pe formulare fiscale precum cele de la ANAF și pe proceduri precum Kindergeld. Fii cât mai util și mai simplu.";
+    // Noul systemPrompt cu o instrucțiune clară de formatare
+    const systemPrompt = "Acționează ca un expert fiscal român specializat pe legislația română și germană, cu accent pe dubla impozitare și beneficii sociale pentru românii din Germania. Răspunde la întrebările utilizatorului într-un mod concis, prietenos și informativ, oferind recomandări generale, dar specificând clar că nu reprezinți un consilier fiscal autorizat. Concentrează-te pe formulare fiscale precum cele de la ANAF și pe proceduri precum Kindergeld. Fii cât mai util și mai simplu. **NU folosi formatări de tip Markdown precum caracterele "**", "**", "`", "`", etc.**";
 
     const payload = {
       contents: [{ parts: [{ text: prompt }] }],
