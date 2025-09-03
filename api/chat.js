@@ -1,60 +1,49 @@
-// This is a Vercel Serverless Function that acts as a proxy for the Gemini API.
-// It hides the API key and avoids CORS issues.
+// api/chat.js
+// Această funcție serverless gestionează apelul către API-ul Gemini, protejând cheia API.
 
-const API_KEY = process.env.GEMINI_API_KEY;
+import { GoogleGenerativeAI } from "@google/generative-ai";
 
-export default async function handler(request, response) {
-    if (request.method !== 'POST') {
-        return response.status(405).send('Method Not Allowed');
+export default async function handler(req, res) {
+    // Verifică dacă cheia API este setată în variabilele de mediu Vercel.
+    const apiKey = process.env.GEMINI_API_KEY;
+    if (!apiKey) {
+        return res.status(500).json({ error: "Cheia API (GEMINI_API_KEY) nu este configurată." });
     }
 
-    // Extract the prompt from the request body
-    const { prompt } = request.body;
+    // Inițializează clientul AI.
+    const genAI = new GoogleGenerativeAI(apiKey);
+    const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash-preview-05-20" });
 
-    if (!prompt) {
-        return response.status(400).send('Prompt is required.');
+    // Verifică metoda de request. Acceptăm doar POST.
+    if (req.method !== 'POST') {
+        return res.status(405).json({ error: 'Metoda HTTP nu este permisă.' });
     }
-
-    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${API_KEY}`;
-
-    // Define the system instruction for the AI
-    const systemPrompt = "Acționează ca un asistent fiscal expert și prietenos pentru românii care locuiesc și lucrează în Germania. Răspunde la întrebări despre impozite, formulare, 'Kindergeld' și alte aspecte fiscale, folosind informații actuale și verificabile. Explică conceptele complexe într-un mod simplu, clar și concis, în limba română. Evită sfaturile financiare personale și recomandă consultarea unui specialist pentru situații complexe.";
-    
-    // Construct the payload for the API request
-    const payload = {
-        contents: [{ parts: [{ text: prompt }] }],
-        tools: [{ "google_search": {} }],
-        systemInstruction: {
-            parts: [{ text: systemPrompt }]
-        },
-    };
 
     try {
-        const geminiResponse = await fetch(apiUrl, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(payload)
+        // Extrage promptul din corpul request-ului.
+        const { prompt } = req.body;
+        
+        // Verifică dacă promptul există.
+        if (!prompt) {
+            return res.status(400).json({ error: 'Promptul lipsește.' });
+        }
+
+        // Defineste instructiunile de sistem pentru AI.
+        const systemPrompt = "Acționează ca un asistent fiscal expert și prietenos pentru românii care locuiesc și lucrează în Germania. Răspunde la întrebări despre impozite, formulare, 'Kindergeld' și alte aspecte fiscale, folosind informații actuale și verificabile. Explică conceptele complexe într-un mod simplu, clar și concis, în limba română. Evită sfaturile financiare personale și recomandă consultarea unui specialist pentru situații complexe.";
+        
+        // Configurarea cererii către API-ul Gemini cu instrucțiunile și instrumentele de căutare.
+        const result = await model.generateContent({
+            contents: [{ parts: [{ text: prompt }] }],
+            tools: [{ google_search: {} }],
+            systemInstruction: { parts: [{ text: systemPrompt }] },
         });
 
-        if (!geminiResponse.ok) {
-            const errorText = await geminiResponse.text();
-            console.error("API Error:", geminiResponse.status, errorText);
-            return response.status(geminiResponse.status).json({ error: "Eroare la apelul API extern." });
-        }
+        // Extrage și trimite răspunsul AI către client.
+        const responseText = result.response.text();
+        res.status(200).json({ text: responseText });
 
-        const result = await geminiResponse.json();
-        const candidate = result.candidates?.[0];
-        let text = 'A apărut o problemă la procesarea răspunsului.';
-
-        if (candidate && candidate.content?.parts?.[0]?.text) {
-            text = candidate.content.parts[0].text;
-        }
-
-        // Send the AI's response back to the client
-        return response.status(200).json({ text: text });
-        
     } catch (error) {
-        console.error("Server-side error:", error);
-        return response.status(500).json({ error: "Eroare la comunicarea cu serverul." });
+        console.error("Eroare la procesarea cererii:", error);
+        res.status(500).json({ error: "A apărut o eroare la procesarea cererii tale." });
     }
 }
