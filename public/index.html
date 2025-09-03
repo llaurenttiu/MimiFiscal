@@ -128,8 +128,9 @@
                         Trimite
                     </button>
                 </div>
-                <div id="loading-indicator" class="hidden mt-3 text-sm text-slate-500 text-center">
-                    Se procesează...
+                <div id="loading-indicator" class="hidden mt-4 flex items-center justify-center space-x-2">
+                    <div class="w-5 h-5 border-2 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+                    <span class="text-sm text-slate-500">Se procesează...</span>
                 </div>
             </div>
         </div>
@@ -175,7 +176,6 @@
 
             const apiEndpoint = '/api/ask'; 
             
-            // Functie pentru a adauga un mesaj in chat
             function addMessage(text, isUser = false) {
                 const messageDiv = document.createElement('div');
                 messageDiv.className = `p-3 my-2 rounded-xl max-w-[85%] message-bubble ${isUser ? 'user' : 'ai'}`;
@@ -184,7 +184,6 @@
                 chatContainer.scrollTop = chatContainer.scrollHeight;
             }
 
-            // Functie principala pentru a trimite mesajul
             async function sendMessage() {
                 const prompt = userInput.value.trim();
                 if (prompt === '') return;
@@ -221,7 +220,6 @@
                 }
             }
             
-            // Adauga evenimente
             sendButton.addEventListener('click', sendMessage);
             userInput.addEventListener('keydown', (event) => {
                 if (event.key === 'Enter') {
@@ -230,7 +228,6 @@
                 }
             });
 
-            // Adauga efectul de glowing pe cardul de chat
             chatCard.addEventListener('mouseenter', () => {
                 chatCard.classList.add('glowing');
             });
@@ -238,7 +235,6 @@
                 chatCard.classList.remove('glowing');
             });
 
-            // Scroll la sectiunea de chat cand se apasa butonul "Incearca gratuit"
             tryFreeButton.addEventListener('click', () => {
                 setTimeout(() => {
                     userInput.focus();
