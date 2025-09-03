@@ -1,3 +1,4 @@
+// /api/chat.js
 export default async function handler(req, res) {
   if (req.method !== "POST") {
     return res.status(405).json({ error: "Method not allowed" });
@@ -15,10 +16,17 @@ export default async function handler(req, res) {
       return res.status(500).json({ error: "API key not set in Vercel" });
     }
 
+    // ✅ model corect
     const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
 
+    // payload corect pentru Gemini
     const payload = {
-      contents: [{ role: "user", parts: [{ text: prompt }] }],
+      contents: [
+        {
+          role: "user",
+          parts: [{ text: prompt }]
+        }
+      ]
     };
 
     if (systemPrompt) {
