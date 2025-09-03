@@ -32,6 +32,25 @@
         .glowing-border.glowing::before {
             opacity: 1;
         }
+        .message-bubble.user {
+            background-color: #3b82f6;
+            color: white;
+            border-bottom-right-radius: 0.5rem;
+            align-self: flex-end;
+            margin-left: auto;
+        }
+        .message-bubble.ai {
+            background-color: #e5e7eb;
+            color: #1f2937;
+            border-bottom-left-radius: 0.5rem;
+            align-self: flex-start;
+            margin-right: auto;
+        }
+        .chat-container {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
     </style>
 </head>
 <body class="bg-gradient-to-br from-gray-100 to-blue-50 text-slate-800">
@@ -98,8 +117,11 @@
             <h3 class="text-3xl md:text-4xl font-bold mb-4 text-slate-800">💬 AI Fiscal</h3>
             <p class="text-lg text-slate-600 mb-8">Întreabă robotul fiscal ce formular ai nevoie și ce taxe poți deduce.</p>
             <div class="bg-white p-8 rounded-2xl shadow-lg glowing-border text-left">
-                <div id="chat-container" class="bg-gray-50 p-4 rounded-xl h-96 overflow-y-auto mb-4 border border-gray-200">
-                    <p class="text-slate-500 italic text-sm">Salut, sunt MimiFiscal, asistentul tău digital. Întreabă-mă orice despre impozite și formulare fiscale!</p>
+                <div id="chat-container" class="bg-gray-50 p-4 rounded-xl h-96 overflow-y-auto mb-4 border border-gray-200 chat-container">
+                    <!-- Mesaj initial de la AI -->
+                    <div class="message-bubble ai p-3 my-2 rounded-xl max-w-[85%]">
+                        Salut, sunt MimiFiscal, asistentul tău digital. Întreabă-mă orice despre impozite și formulare fiscale!
+                    </div>
                 </div>
                 <div class="flex space-x-3">
                     <input type="text" id="user-input" placeholder="Scrie întrebarea ta..." class="flex-grow px-4 py-3 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500">
@@ -152,9 +174,32 @@
             const tryFreeButton = document.getElementById('try-free-btn');
             const chatCard = document.querySelector('#demo .bg-white');
 
+            const apiKey = "";
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
+            const systemPrompt = "Acționează ca un asistent fiscal expert și prietenos pentru românii care locuiesc și lucrează în Germania. Răspunde la întrebări despre impozite, formulare, 'Kindergeld' și alte aspecte fiscale, folosind informații actuale și verificabile. Explică conceptele complexe într-un mod simplu, clar și concis, în limba română. Evită sfaturile financiare personale și recomandă consultarea unui specialist pentru situații complexe.";
+            
+            // Function to handle API errors with exponential backoff
+            const fetchWithExponentialBackoff = async (url, options, retries = 3, delay = 1000) => {
+                try {
+                    const response = await fetch(url, options);
+                    if (response.status === 429 && retries > 0) {
+                        console.log(`Rate limit exceeded. Retrying in ${delay}ms...`);
+                        await new Promise(resolve => setTimeout(resolve, delay));
+                        return fetchWithExponentialBackoff(url, options, retries - 1, delay * 2);
+                    }
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    return response;
+                } catch (error) {
+                    console.error('Fetch error:', error);
+                    throw error;
+                }
+            };
+
             function addMessage(text, isUser = false) {
                 const messageDiv = document.createElement('div');
-                messageDiv.className = `p-3 my-2 rounded-xl max-w-[85%] ${isUser ? 'bg-blue-500 text-white ml-auto' : 'bg-gray-200 text-slate-800 mr-auto'}`;
+                messageDiv.className = `p-3 my-2 rounded-xl max-w-[85%] message-bubble ${isUser ? 'user' : 'ai'}`;
                 messageDiv.textContent = text;
                 chatContainer.appendChild(messageDiv);
                 chatContainer.scrollTop = chatContainer.scrollHeight;
@@ -180,14 +225,12 @@
 
                 addMessage(prompt, true);
                 userInput.value = '';
+                userInput.disabled = true;
+                sendButton.disabled = true;
                 loadingIndicator.classList.remove('hidden');
 
-                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent`;
-                const systemPrompt = "Acționează ca un asistent fiscal expert și prietenos pentru românii care locuiesc și lucrează în Germania. Răspunde la întrebări despre impozite, formulare, 'Kindergeld' și alte aspecte fiscale, folosind informații actuale și verificabile. Explică conceptele complexe într-un mod simplu, clar și concis, în limba română. Evită sfaturile financiare personale și recomandă consultarea unui specialist pentru situații complexe.";
-                const userQuery = prompt;
-
                 const payload = {
-                    contents: [{ parts: [{ text: userQuery }] }],
+                    contents: [{ parts: [{ text: prompt }] }],
                     tools: [{ "google_search": {} }],
                     systemInstruction: {
                         parts: [{ text: systemPrompt }]
@@ -195,17 +238,11 @@
                 };
 
                 try {
-                    const response = await fetch(apiUrl, {
+                    const response = await fetchWithExponentialBackoff(apiUrl, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify(payload)
                     });
-
-                    if (!response.ok) {
-                        const errorText = await response.text();
-                        console.error("Eroare la apelul API:", response.status, errorText);
-                        throw new Error(`Eroare la apelul API: ${response.status}. Detalii: ${errorText}`);
-                    }
 
                     const result = await response.json();
                     const candidate = result.candidates?.[0];
@@ -222,6 +259,9 @@
                     addMessage(`A apărut o eroare la procesarea cererii. Te rog să încerci din nou.`, false);
                 } finally {
                     loadingIndicator.classList.add('hidden');
+                    userInput.disabled = false;
+                    sendButton.disabled = false;
+                    userInput.focus();
                 }
             }
 
