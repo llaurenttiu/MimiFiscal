@@ -1,6 +1,6 @@
 const express = require('express');
 const path = require('path');
-const chatApi = require('./api/chat'); // Importă noul fișier
+const chatApi = require('./api/chat');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -10,7 +10,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.json());
 
 // Utilizează noul endpoint pentru chat
-app.use('/api/chat', chatApi);
+app.post('/api/chat', chatApi);
 
 // Redirecționează toate cererile nespecificate către index.html
 app.get('*', (req, res) => {
