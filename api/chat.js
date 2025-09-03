@@ -1,49 +1,47 @@
-// api/chat.js
-// Această funcție serverless gestionează apelul către API-ul Gemini, protejând cheia API.
-
-import { GoogleGenerativeAI } from "@google/generative-ai";
+// /api/chat.js
 
 export default async function handler(req, res) {
-    // Verifică dacă cheia API este setată în variabilele de mediu Vercel.
+  if (req.method !== "POST") {
+    return res.status(405).json({ error: "Method not allowed" });
+  }
+
+  try {
+    const { prompt, systemPrompt } = req.body;
+
+    if (!prompt) {
+      return res.status(400).json({ error: "Missing prompt" });
+    }
+
     const apiKey = process.env.GEMINI_API_KEY;
-    if (!apiKey) {
-        return res.status(500).json({ error: "Cheia API (GEMINI_API_KEY) nu este configurată." });
+    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
+
+    const payload = {
+      contents: [{ parts: [{ text: prompt }] }],
+      systemInstruction: {
+        parts: [{ text: systemPrompt || "" }]
+      }
+    };
+
+    const response = await fetch(apiUrl, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      return res.status(response.status).json({ error: errorText });
     }
 
-    // Inițializează clientul AI.
-    const genAI = new GoogleGenerativeAI(apiKey);
-    const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash-preview-05-20" });
+    const data = await response.json();
+    const candidate = data.candidates?.[0];
+    const text =
+      candidate?.content?.parts?.[0]?.text ||
+      "Nu am putut genera un răspuns. Încearcă din nou.";
 
-    // Verifică metoda de request. Acceptăm doar POST.
-    if (req.method !== 'POST') {
-        return res.status(405).json({ error: 'Metoda HTTP nu este permisă.' });
-    }
-
-    try {
-        // Extrage promptul din corpul request-ului.
-        const { prompt } = req.body;
-        
-        // Verifică dacă promptul există.
-        if (!prompt) {
-            return res.status(400).json({ error: 'Promptul lipsește.' });
-        }
-
-        // Defineste instructiunile de sistem pentru AI.
-        const systemPrompt = "Acționează ca un asistent fiscal expert și prietenos pentru românii care locuiesc și lucrează în Germania. Răspunde la întrebări despre impozite, formulare, 'Kindergeld' și alte aspecte fiscale, folosind informații actuale și verificabile. Explică conceptele complexe într-un mod simplu, clar și concis, în limba română. Evită sfaturile financiare personale și recomandă consultarea unui specialist pentru situații complexe.";
-        
-        // Configurarea cererii către API-ul Gemini cu instrucțiunile și instrumentele de căutare.
-        const result = await model.generateContent({
-            contents: [{ parts: [{ text: prompt }] }],
-            tools: [{ google_search: {} }],
-            systemInstruction: { parts: [{ text: systemPrompt }] },
-        });
-
-        // Extrage și trimite răspunsul AI către client.
-        const responseText = result.response.text();
-        res.status(200).json({ text: responseText });
-
-    } catch (error) {
-        console.error("Eroare la procesarea cererii:", error);
-        res.status(500).json({ error: "A apărut o eroare la procesarea cererii tale." });
-    }
+    res.status(200).json({ reply: text });
+  } catch (error) {
+    console.error("API Error:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
 }
