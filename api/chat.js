@@ -1,5 +1,3 @@
-// /api/chat.js
-
 export default async function handler(req, res) {
   if (req.method !== "POST") {
     return res.status(405).json({ error: "Method not allowed" });
@@ -13,14 +11,19 @@ export default async function handler(req, res) {
     }
 
     const apiKey = process.env.GEMINI_API_KEY;
-    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
+    if (!apiKey) {
+      return res.status(500).json({ error: "API key not set in Vercel" });
+    }
+
+    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
 
     const payload = {
-      contents: [{ parts: [{ text: prompt }] }],
-      systemInstruction: {
-        parts: [{ text: systemPrompt || "" }]
-      }
+      contents: [{ role: "user", parts: [{ text: prompt }] }],
     };
+
+    if (systemPrompt) {
+      payload.systemInstruction = { parts: [{ text: systemPrompt }] };
+    }
 
     const response = await fetch(apiUrl, {
       method: "POST",
@@ -28,18 +31,20 @@ export default async function handler(req, res) {
       body: JSON.stringify(payload),
     });
 
+    const text = await response.text();
+
     if (!response.ok) {
-      const errorText = await response.text();
-      return res.status(response.status).json({ error: errorText });
+      console.error("Gemini API error:", text);
+      return res.status(response.status).json({ error: text });
     }
 
-    const data = await response.json();
+    const data = JSON.parse(text);
     const candidate = data.candidates?.[0];
-    const text =
+    const reply =
       candidate?.content?.parts?.[0]?.text ||
-      "Nu am putut genera un răspuns. Încearcă din nou.";
+      "Nu am putut genera un răspuns.";
 
-    res.status(200).json({ reply: text });
+    res.status(200).json({ reply });
   } catch (error) {
     console.error("API Error:", error);
     res.status(500).json({ error: "Internal server error" });
