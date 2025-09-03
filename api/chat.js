@@ -1,8 +1,4 @@
-// Acest fișier este o funcție serverless Vercel care va rula pe backend
-// și va ascunde cheia API de codul public al site-ului.
-
-// Importă modulul necesar.
-const { GoogleGenerativeAI } = require('@google/generative-ai');
+import { GoogleGenerativeAI } from '@google/generative-ai';
 
 // Configurează-ți modelul Generative AI.
 // Cheia API este citită dintr-o variabilă de mediu, nu este vizibilă public.
