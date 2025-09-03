@@ -74,7 +74,7 @@
         </div>
         <h4 class="text-xl font-semibold mb-2 text-slate-900">📄 Formular ANAF</h4>
         <p class="text-base text-slate-600 mb-6">Evită dubla impozitare DE-RO: Completare + generare PDF</p>
-        <a href="assets/Fiscalresidence .pdf" download="Fiscalresidence.pdf" class="mt-auto bg-blue-600 text-white px-8 py-3 rounded-full hover:bg-blue-700 transition transform hover:-translate-y-1 inline-block font-semibold">
+        <a href="assets/Fiscalresidence.pdf" download="Fiscalresidence.pdf" class="mt-auto bg-blue-600 text-white px-8 py-3 rounded-full hover:bg-blue-700 transition transform hover:-translate-y-1 inline-block font-semibold">
           Descarcă
         </a>
       </div>
@@ -110,6 +110,7 @@
           <div id="loading-indicator" class="hidden mt-3 text-sm text-slate-500 text-center">
               Se procesează...
           </div>
+          <p class="mt-4 text-xs text-gray-500">⚠️ Răspunsurile sunt informative și nu înlocuiesc consultanța fiscală oficială.</p>
       </div>
     </div>
   </section>
@@ -150,9 +151,6 @@
     const loadingIndicator = document.getElementById('loading-indicator');
     const tryFreeButton = document.getElementById('try-free-btn');
     const chatCard = document.querySelector('#demo .bg-white');
-    
-    // Cheia API este hardcodată direct în cod
-    const userApiKey = 'AIzaSyCa2sHCmHFlB7v6Fz-U3H07YJczBxGTyXw';
 
     function addMessage(text, isUser = false) {
       const messageDiv = document.createElement('div');
@@ -161,7 +159,7 @@
       chatContainer.appendChild(messageDiv);
       chatContainer.scrollTop = chatContainer.scrollHeight;
     }
-    
+
     chatCard.addEventListener('mouseenter', () => {
       chatCard.classList.add('glowing');
     });
@@ -179,47 +177,21 @@
         loadingIndicator.classList.remove('hidden');
 
         try {
-            const systemPrompt = "Acționează ca un expert fiscal român specializat pe legislația română și germană, cu accent pe dubla impozitare și beneficii sociale pentru românii din Germania. Răspunde la întrebările utilizatorului într-un mod concis, prietenos și informativ, oferind recomandări generale, dar specificând clar că nu reprezinți un consilier fiscal autorizat. Concentrează-te pe formulare fiscale precum cele de la ANAF și pe proceduri precum Kindergeld. Fii cât mai util și mai simplu.";
-
-            const userQuery = prompt;
-            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${userApiKey}`;
-
-            const payload = {
-                contents: [{ parts: [{ text: userQuery }] }],
-                tools: [{ "google_search": {} }],
-                systemInstruction: {
-                    parts: [{ text: systemPrompt }]
-                },
-            };
-
-            const response = await fetch(apiUrl, {
+            const response = await fetch('/api/chat', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload)
+                body: JSON.stringify({ prompt })
             });
 
             if (!response.ok) {
-                const errorText = await response.text();
-                throw new Error(`API response status: ${response.status}. Body: ${errorText}`);
+                throw new Error(`Eroare server: ${response.status}`);
             }
 
-            const responseText = await response.text();
-            if (!responseText) {
-              throw new Error('Corpul răspunsului de la API este gol.');
-            }
-
-            let result;
-            try {
-              result = JSON.parse(responseText);
-            } catch (jsonError) {
-              throw new Error(`Eroare la parsarea JSON: ${jsonError.message}. Răspuns: ${responseText.substring(0, 100)}...`);
-            }
-
-            const text = result?.candidates?.[0]?.content?.parts?.[0]?.text || 'Nu am putut găsi un răspuns. Te rog să încerci din nou.';
-            addMessage(text, false);
+            const result = await response.json();
+            addMessage(result.text, false);
         } catch (error) {
-            console.error("Eroare la apelul API Gemini:", error);
-            addMessage(`A apărut o eroare la procesarea cererii. Te rog să încerci din nou. Detalii: ${error.message}`, false);
+            console.error("Eroare la apelul API proxy:", error);
+            addMessage(`A apărut o eroare la procesarea cererii. Te rog să încerci din nou.`, false);
         } finally {
             loadingIndicator.classList.add('hidden');
         }
