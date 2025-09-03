@@ -5,7 +5,7 @@ const fetch = require('node-fetch');
 
 const app = express();
 
-app.use(cors()); // Permite cereri din browser. O metodă mai sigură este specificarea origin-ului.
+app.use(cors());
 app.use(express.json());
 
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
@@ -13,10 +13,9 @@ const apiUrl = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2
 
 const systemPrompt = "Acționează ca un asistent fiscal expert și prietenos pentru românii care locuiesc și lucrează în Germania. Răspunde la întrebări despre impozite, formulare, 'Kindergeld' și alte aspecte fiscale, folosind informații actuale și verificabile. Explică conceptele complexe într-un mod simplu, clar și concis, în limba română. Evită sfaturile financiare personale și recomandă consultarea unui specialist pentru situații complexe.";
 
-// Aceasta este funcția serverless care va fi executată
 module.exports = async (req, res) => {
   if (req.method !== 'POST') {
-    return res.status(405).send('Method Not Allowed');
+    return res.status(405).json({ error: 'Metoda HTTP nu este permisă.' });
   }
 
   const { prompt } = req.body;
@@ -41,7 +40,6 @@ module.exports = async (req, res) => {
     });
 
     if (!response.ok) {
-        // În caz de eroare, Vercel va trimite codul de eroare corect
         const errorData = await response.json();
         return res.status(response.status).json(errorData);
     }
