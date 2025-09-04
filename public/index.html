@@ -76,6 +76,12 @@
             transform: translateY(0);
             box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
         }
+        .service-card-icon {
+            transition: transform 0.3s ease-in-out;
+        }
+        .service-card:hover .service-card-icon {
+            transform: scale(1.1);
+        }
     </style>
 </head>
 <body class="bg-gradient-to-br from-gray-100 to-blue-50 text-slate-800">
@@ -116,8 +122,8 @@
             <p class="text-lg text-slate-600">Servicii digitale create special pentru nevoile tale.</p>
         </div>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
-            <div class="bg-gradient-to-br from-white to-blue-200 p-8 rounded-2xl shadow-lg hover:shadow-xl hover:scale-[1.02] transition-transform duration-300 flex flex-col items-center text-center">
-                <div class="bg-green-100 text-green-700 rounded-full p-4 mb-4">
+            <div class="service-card bg-gradient-to-br from-white to-green-100 p-8 rounded-2xl shadow-lg hover:shadow-xl hover:scale-[1.02] transition-transform duration-300 flex flex-col items-center text-center">
+                <div class="service-card-icon bg-green-100 text-green-700 rounded-full p-4 mb-4">
                     <svg class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                     </svg>
@@ -128,8 +134,8 @@
                     Descarcă
                 </a>
             </div>
-            <div class="bg-gradient-to-br from-white to-blue-200 p-8 rounded-2xl shadow-lg hover:shadow-xl hover:scale-[1.02] transition-transform duration-300 flex flex-col items-center text-center">
-                <div class="bg-yellow-100 text-yellow-700 rounded-full p-4 mb-4">
+            <div class="service-card bg-gradient-to-br from-white to-yellow-100 p-8 rounded-2xl shadow-lg hover:shadow-xl hover:scale-[1.02] transition-transform duration-300 flex flex-col items-center text-center">
+                <div class="service-card-icon bg-yellow-100 text-yellow-700 rounded-full p-4 mb-4">
                     <svg class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15M9 6v12M15 6v12" />
                     </svg>
@@ -198,7 +204,7 @@
 
     <footer class="bg-slate-800 text-white py-6 text-center text-sm">
         <div class="max-w-7xl mx-auto px-4 sm:px-6">
-            <p class="mb-1">© 2025 MimiFiscal · Operat de Laur · <a href="#disclaimer" class="underline">Disclaimer</a> · GDPR Compliant</p>
+            <p class="mb-1">© 2025 MimiFiscal · Operat de Laur · GDPR Compliant</p>
             <p>Made in 
             <img src="https://upload.wikimedia.org/wikipedia/commons/b/ba/Flag_of_Germany.svg" alt="Steagul Germaniei" class="h-4 w-auto inline-block mx-1 rounded-sm" />
             <img src="https://upload.wikimedia.org/wikipedia/commons/7/73/Flag_of_Romania.svg" alt="Steagul României" class="h-4 w-auto inline-block mx-1 rounded-sm" />
