@@ -263,9 +263,8 @@
 
                 const systemPrompt = "Acționează ca un asistent fiscal digital prietenos, specializat pe problemele fiscale întâmpinate de românii care locuiesc și lucrează în Germania. Oferă răspunsuri clare, concise și utile pe baza întrebărilor primite. Nu oferi sfaturi fiscale obligatorii, ci doar informații informative și documentate. Încurajează utilizatorul să consulte un expert fiscal pentru situații complexe. Răspunde în română.";
                 const userQuery = prompt;
-                const apiKey = ""; // Lăsați gol; Canvas va furniza cheia API
-                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
-
+                
+                // Definirea obiectului payload pentru API
                 const payload = {
                     contents: [{ parts: [{ text: userQuery }] }],
                     tools: [{ "google_search": {} }],
@@ -273,32 +272,41 @@
                         parts: [{ text: systemPrompt }]
                     },
                 };
-
-                const response = await fetch(apiUrl, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
-                });
                 
-                if (!response.ok) {
-                    const errorText = await response.text();
-                    console.error("Eroare la apelul către API:", errorText);
-                    addMessage(`A apărut o eroare la procesarea cererii. Te rog să încerci din nou.`, false);
+                // Variabila globală __api_key este furnizată de mediul de execuție,
+                // eliminând necesitatea de a o hardcodifica sau de a o gestiona manual.
+                const apiKey = typeof __api_key !== 'undefined' ? __api_key : '';
+                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
+
+                let response;
+                try {
+                    response = await fetch(apiUrl, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+
+                    if (response.status === 401) {
+                        addMessage(`O eroare de autentificare a apărut la procesarea cererii. Te rog să reîncarci pagina sau să încerci mai târziu.`, false);
+                        console.error("Eroare la apelul către API: 401 Unauthorized. Verifică cheia API.");
+                    } else if (!response.ok) {
+                        const errorText = await response.text();
+                        console.error("Eroare la apelul către API:", response.status, response.statusText, errorText);
+                        addMessage(`A apărut o eroare la procesarea cererii. Te rog să încerci din nou.`, false);
+                    } else {
+                        const result = await response.json();
+                        const text = result?.candidates?.[0]?.content?.parts?.[0]?.text || 'Nu am putut găsi un răspuns. Te rog să încerci din nou.';
+                        addMessage(text, false);
+                    }
+                } catch (error) {
+                    console.error("Eroare de rețea sau de procesare:", error);
+                    addMessage(`A apărut o eroare de rețea. Verifică-ți conexiunea la internet și încearcă din nou.`, false);
+                } finally {
                     loadingIndicator.classList.add('hidden');
                     userInput.disabled = false;
                     sendButton.disabled = false;
                     userInput.focus();
-                    return;
                 }
-                
-                const result = await response.json();
-                const text = result?.candidates?.[0]?.content?.parts?.[0]?.text || 'Nu am putut găsi un răspuns. Te rog să încerci din nou.';
-                addMessage(text, false);
-
-                loadingIndicator.classList.add('hidden');
-                userInput.disabled = false;
-                sendButton.disabled = false;
-                userInput.focus();
             }
 
             function addMessage(text, isUser = false) {
@@ -369,4 +377,3 @@
     </script>
 </body>
 </html>
-
