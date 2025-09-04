@@ -64,6 +64,18 @@
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
+        .send-button {
+            transition: all 0.2s ease-in-out;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+        .send-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        .send-button:active {
+            transform: translateY(0);
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+        }
     </style>
 </head>
 <body class="bg-gradient-to-br from-gray-100 to-blue-50 text-slate-800">
@@ -145,7 +157,7 @@
                 </div>
                 <div class="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-3">
                     <input type="text" id="user-input" placeholder="Scrie întrebarea ta..." class="flex-grow px-4 py-3 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500">
-                    <button id="send-button" class="bg-blue-700 text-white px-6 py-3 rounded-full hover:bg-blue-800 transition transform hover:scale-105 shadow-md flex items-center justify-center">
+                    <button id="send-button" class="send-button bg-blue-700 text-white px-6 py-3 rounded-full hover:bg-blue-800 transition transform hover:scale-105 shadow-md flex items-center justify-center">
                         Trimite
                     </button>
                 </div>
