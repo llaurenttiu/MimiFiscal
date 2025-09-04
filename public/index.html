@@ -56,9 +56,9 @@
 <body class="bg-gradient-to-br from-gray-100 to-blue-50 text-slate-800">
 
     <header class="bg-white border-b border-gray-200 shadow-sm sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex justify-between items-center">
             <a href="#" class="text-xl font-bold text-blue-700 hover:text-blue-900 transition-colors">MimiFiscal</a>
-            <nav class="space-x-6 hidden md:flex text-sm font-medium text-slate-600">
+            <nav class="space-x-4 hidden md:flex text-sm font-medium text-slate-600">
                 <a href="#servicii" class="hover:text-blue-700 transition-colors">Servicii</a>
                 <a href="#doneaza" class="hover:text-blue-700 transition-colors">Donații</a>
                 <a href="#contact" class="hover:text-blue-700 transition-colors">Contact</a>
@@ -71,7 +71,7 @@
             <h2 class="text-4xl md:text-5xl font-extrabold text-blue-900 mb-6 leading-tight">
                 Simplificăm birocrația pentru românii din Germania
             </h2>
-            <p class="text-lg md:text-xl text-slate-700 mb-8">
+            <p class="text-lg md:text-xl text-slate-700 mb-8 px-4">
                 Formulare fiscale, Kindergeld, dublă impozitare, totul completat automat și explicat simplu.
             </p>
             <a href="#demo" id="try-free-btn" class="bg-blue-700 text-white px-10 py-4 rounded-full text-base font-semibold hover:bg-blue-800 transition transform hover:scale-105 shadow-lg">
@@ -81,7 +81,7 @@
         <div class="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-gray-100 to-transparent"></div>
     </section>
 
-    <section id="servicii" class="py-20 px-6 bg-gradient-to-b from-gray-100 to-white">
+    <section id="servicii" class="py-16 px-4 sm:px-6 bg-gradient-to-b from-gray-100 to-white">
         <div class="text-center mb-12">
             <h3 class="text-3xl md:text-4xl font-bold text-slate-800 mb-4">Ce oferim</h3>
             <p class="text-lg text-slate-600">Servicii digitale create special pentru nevoile tale.</p>
@@ -112,17 +112,17 @@
 
     <hr class="my-10 max-w-7xl mx-auto border-gray-300">
 
-    <section id="demo" class="py-20 px-6 bg-gradient-to-b from-blue-100 to-white">
+    <section id="demo" class="py-16 px-4 sm:px-6 bg-gradient-to-b from-blue-100 to-white">
         <div class="max-w-4xl mx-auto text-center">
             <h3 class="text-3xl md:text-4xl font-bold mb-4 text-slate-800">💬 AI Fiscal</h3>
             <p class="text-lg text-slate-600 mb-8">Întreabă robotul fiscal ce formular ai nevoie și ce taxe poți deduce.</p>
-            <div class="bg-white p-8 rounded-2xl shadow-lg glowing-border text-left">
+            <div class="bg-white p-6 md:p-8 rounded-2xl shadow-lg glowing-border text-left">
                 <div id="chat-container" class="bg-gray-50 p-4 rounded-xl h-96 overflow-y-auto mb-4 border border-gray-200 chat-container">
                     <div class="message-bubble ai p-3 my-2 rounded-xl max-w-[85%]">
                         Salut, sunt MimiFiscal, asistentul tău digital. Întreabă-mă orice despre impozite și formulare fiscale!
                     </div>
                 </div>
-                <div class="flex space-x-3">
+                <div class="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-3">
                     <input type="text" id="user-input" placeholder="Scrie întrebarea ta..." class="flex-grow px-4 py-3 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500">
                     <button id="send-button" class="bg-blue-700 text-white px-6 py-3 rounded-full hover:bg-blue-800 transition transform hover:scale-105 shadow-md flex items-center justify-center">
                         Trimite
@@ -136,13 +136,13 @@
         </div>
     </section>
 
-    <section id="doneaza" class="py-20 px-6 bg-gradient-to-b from-blue-50 to-white text-center">
+    <section id="doneaza" class="py-16 px-4 sm:px-6 bg-gradient-to-b from-blue-50 to-white text-center">
         <div class="max-w-4xl mx-auto">
             <h3 class="text-3xl md:text-4xl font-bold mb-4 text-slate-800">Susține-ne munca!</h3>
             <p class="text-lg text-slate-600 mb-8">
                 Dacă ești mulțumit de serviciile gratuite, ne poți susține munca printr-o mică donație. Fiecare contribuție ne ajută să menținem platforma activă și să dezvoltăm noi funcționalități.
             </p>
-            <div class="flex items-center justify-center space-x-6 mx-auto">
+            <div class="flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-6 mx-auto">
                 <img src="https://upload.wikimedia.org/wikipedia/commons/b/b5/PayPal.svg" alt="PayPal Logo" class="w-28 h-auto opacity-80">
                 <a href="https://paypal.me/Laurdur" target="_blank" rel="noopener noreferrer" class="bg-blue-700 text-white px-10 py-4 rounded-full text-base font-semibold hover:bg-blue-800 transition transform hover:scale-105 shadow-lg">
                     Donează acum
@@ -151,7 +151,7 @@
         </div>
     </section>
 
-    <section id="contact" class="py-20 text-center bg-gradient-to-b from-white to-gray-100">
+    <section id="contact" class="py-16 px-4 sm:px-6 text-center bg-gradient-to-b from-white to-gray-100">
         <div class="max-w-xl mx-auto">
             <h3 class="text-3xl font-bold mb-4 text-slate-800">Ai întrebări?</h3>
             <p class="text-lg text-slate-600 mb-8">Scrie-ne pe <strong class="text-blue-600">contact@mimifiscal.com</strong> sau WhatsApp și te ajutăm rapid.</p>
@@ -160,7 +160,7 @@
     </section>
 
     <footer class="bg-slate-800 text-white py-6 text-center text-sm">
-        <div class="max-w-7xl mx-auto px-6">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6">
             © 2025 MimiFiscal · Operat de [Numele firmei] · GDPR Compliant · Made in 🇩🇪 + 🇷🇴
         </div>
     </footer>
