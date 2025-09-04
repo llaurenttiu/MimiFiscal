@@ -51,6 +51,19 @@
             flex-direction: column;
             gap: 0.5rem;
         }
+        /* New spinner animation */
+        .loader {
+            border: 4px solid #f3f3f3; /* Light grey */
+            border-top: 4px solid #3b82f6; /* Blue */
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            animation: spin 2s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
     </style>
 </head>
 <body class="bg-gradient-to-br from-gray-100 to-blue-50 text-slate-800">
@@ -137,8 +150,8 @@
                     </button>
                 </div>
                 <div id="loading-indicator" class="hidden mt-4 flex items-center justify-center space-x-2">
-                    <div class="w-5 h-5 border-2 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
-                    <span class="text-sm text-slate-500">Se procesează...</span>
+                    <div class="loader"></div>
+                    <span class="text-sm text-gray-700">Se procesează...</span>
                 </div>
             </div>
         </div>
