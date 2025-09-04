@@ -82,26 +82,45 @@
         .service-card:hover .service-card-icon {
             transform: scale(1.1);
         }
+        /* CSS pentru animația de scroll */
+        .fade-in-up {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+        .fade-in-up.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
     </style>
 </head>
 <body class="bg-gradient-to-br from-gray-100 to-blue-50 text-slate-800">
 
     <header class="bg-white border-b border-gray-200 shadow-sm sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex justify-between items-center">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex justify-between items-center relative">
             <a href="#" class="flex items-center text-xl font-bold text-blue-700 hover:text-blue-900 transition-colors">
                 MimiFiscal
                 <img src="https://upload.wikimedia.org/wikipedia/commons/b/ba/Flag_of_Germany.svg" alt="Steagul Germaniei" class="h-6 w-auto ml-2 rounded-sm" />
                 <img src="https://upload.wikimedia.org/wikipedia/commons/7/73/Flag_of_Romania.svg" alt="Steagul României" class="h-6 w-auto ml-1 rounded-sm" />
             </a>
-            <nav class="space-x-4 hidden md:flex text-sm font-medium text-slate-600">
-                <a href="#servicii" class="hover:text-blue-700 transition-colors">Servicii</a>
-                <a href="#doneaza" class="hover:text-blue-700 transition-colors">Donații</a>
-                <a href="#contact" class="hover:text-blue-700 transition-colors">Contact</a>
+            
+            <!-- Buton pentru meniul mobil (hamburger) -->
+            <button id="mobile-menu-button" class="md:hidden text-gray-500 hover:text-blue-600 focus:outline-none focus:text-blue-600 transition-colors">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
+                </svg>
+            </button>
+
+            <!-- Meniul de navigare - ascuns pe mobil initial -->
+            <nav id="mobile-menu" class="hidden md:flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4 text-sm font-medium text-slate-600 md:relative md:bg-transparent md:p-0 absolute top-full left-0 right-0 bg-white border-t border-gray-200 shadow-lg p-4 z-40">
+                <a href="#servicii" class="hover:text-blue-700 transition-colors block px-2 py-1">Servicii</a>
+                <a href="#doneaza" class="hover:text-blue-700 transition-colors block px-2 py-1">Donații</a>
+                <a href="#contact" class="hover:text-blue-700 transition-colors block px-2 py-1">Contact</a>
             </nav>
         </div>
     </header>
 
-    <section class="hero-gradient text-center py-24 px-4 relative overflow-hidden">
+    <section class="hero-gradient text-center py-24 px-4 relative overflow-hidden fade-in-up">
         <div class="max-w-4xl mx-auto relative z-10">
             <h2 class="text-4xl md:text-5xl font-extrabold text-blue-900 mb-6 leading-tight">
                 Simplificăm birocrația pentru românii din Germania
@@ -116,7 +135,7 @@
         <div class="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-gray-100 to-transparent"></div>
     </section>
 
-    <section id="servicii" class="py-16 px-4 sm:px-6 bg-gradient-to-b from-gray-100 to-white">
+    <section id="servicii" class="py-16 px-4 sm:px-6 bg-gradient-to-b from-gray-100 to-white fade-in-up">
         <div class="text-center mb-12">
             <h3 class="text-3xl md:text-4xl font-bold text-slate-800 mb-4">Ce oferim</h3>
             <p class="text-lg text-slate-600">Servicii digitale create special pentru nevoile tale.</p>
@@ -151,7 +170,7 @@
 
     <hr class="my-10 max-w-7xl mx-auto border-gray-300">
 
-    <section id="demo" class="py-16 px-4 sm:px-6 bg-gradient-to-b from-blue-100 to-white">
+    <section id="demo" class="py-16 px-4 sm:px-6 bg-gradient-to-b from-blue-100 to-white fade-in-up">
         <div class="max-w-4xl mx-auto text-center">
             <h3 class="text-3xl md:text-4xl font-bold mb-4 text-slate-800">💬 AI Fiscal</h3>
             <p class="text-lg text-slate-600 mb-8">Întreabă robotul fiscal ce formular ai nevoie și ce taxe poți deduce.</p>
@@ -179,7 +198,7 @@
         </div>
     </section>
 
-    <section id="doneaza" class="py-16 px-4 sm:px-6 bg-gradient-to-b from-blue-50 to-white text-center">
+    <section id="doneaza" class="py-16 px-4 sm:px-6 bg-gradient-to-b from-blue-50 to-white text-center fade-in-up">
         <div class="max-w-4xl mx-auto">
             <h3 class="text-3xl md:text-4xl font-bold mb-4 text-slate-800">Susține-ne munca!</h3>
             <p class="text-lg text-slate-600 mb-8">
@@ -194,7 +213,7 @@
         </div>
     </section>
 
-    <section id="contact" class="py-16 px-4 sm:px-6 text-center bg-gradient-to-b from-white to-gray-100">
+    <section id="contact" class="py-16 px-4 sm:px-6 text-center bg-gradient-to-b from-white to-gray-100 fade-in-up">
         <div class="max-w-xl mx-auto">
             <h3 class="text-3xl font-bold mb-4 text-slate-800">Ai întrebări?</h3>
             <p class="text-lg text-slate-600 mb-8">Scrie-ne pe <strong class="text-blue-600">contact@mimifiscal.com</strong> sau WhatsApp și te ajutăm rapid.</p>
@@ -202,7 +221,7 @@
         </div>
     </section>
     
-    <div class="py-6 text-xs text-gray-500 space-y-2 flex flex-col items-start mx-auto w-fit">
+    <div class="py-6 text-xs text-gray-500 space-y-2 flex flex-col items-start mx-auto w-fit fade-in-up">
         <p class="flex items-center space-x-1">
             <img src="https://upload.wikimedia.org/wikipedia/commons/a/a5/Flag_of_the_United_Kingdom_%281-2%29.svg" alt="UK Flag" class="h-2 w-auto rounded-sm" />
             <span>This site was created with the help of Gemini AI + ChatGPT</span>
@@ -297,6 +316,42 @@
                 setTimeout(() => {
                     userInput.focus();
                 }, 100);
+            });
+
+            // Logica pentru meniul mobil
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+
+            mobileMenuButton.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+
+            // Ascunde meniul mobil atunci când un link este apăsat
+            mobileMenu.querySelectorAll('a').forEach(link => {
+                link.addEventListener('click', () => {
+                    mobileMenu.classList.add('hidden');
+                });
+            });
+
+            // Logica pentru animația de scroll
+            const observerOptions = {
+                root: null,
+                rootMargin: '0px',
+                threshold: 0.2 // Declanșează când 20% din element este vizibil
+            };
+
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('is-visible');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, observerOptions);
+
+            const animatedElements = document.querySelectorAll('.fade-in-up');
+            animatedElements.forEach(element => {
+                observer.observe(element);
             });
         });
     </script>
