@@ -149,6 +149,10 @@
         <div class="max-w-4xl mx-auto text-center">
             <h3 class="text-3xl md:text-4xl font-bold mb-4 text-slate-800">💬 AI Fiscal</h3>
             <p class="text-lg text-slate-600 mb-8">Întreabă robotul fiscal ce formular ai nevoie și ce taxe poți deduce.</p>
+            <div class="bg-red-100 text-red-700 border border-red-200 rounded-xl p-4 mb-6 shadow-sm">
+                <p class="font-semibold">Atentie:</p>
+                <p class="text-sm">Informațiile furnizate pe acest site au caracter pur informativ și nu constituie consultanță fiscală. Pentru sfaturi personalizate, te rugăm să consulți un expert fiscal autorizat. Proprietarul acestui site, Laur, nu deține nicio autorizație fiscală.</p>
+            </div>
             <div class="bg-white p-6 md:p-8 rounded-2xl shadow-lg glowing-border text-left">
                 <div id="chat-container" class="bg-gray-50 p-4 rounded-xl h-96 overflow-y-auto mb-4 border border-gray-200 chat-container">
                     <div class="message-bubble ai p-3 my-2 rounded-xl max-w-[85%]">
@@ -194,9 +198,11 @@
 
     <footer class="bg-slate-800 text-white py-6 text-center text-sm">
         <div class="max-w-7xl mx-auto px-4 sm:px-6">
-            © 2025 MimiFiscal · Operat de Laur · GDPR Compliant · Made in 
+            <p class="mb-1">© 2025 MimiFiscal · Operat de Laur · <a href="#disclaimer" class="underline">Disclaimer</a> · GDPR Compliant</p>
+            <p>Made in 
             <img src="https://upload.wikimedia.org/wikipedia/commons/b/ba/Flag_of_Germany.svg" alt="Steagul Germaniei" class="h-4 w-auto inline-block mx-1 rounded-sm" />
             <img src="https://upload.wikimedia.org/wikipedia/commons/7/73/Flag_of_Romania.svg" alt="Steagul României" class="h-4 w-auto inline-block mx-1 rounded-sm" />
+            </p>
         </div>
     </footer>
 
