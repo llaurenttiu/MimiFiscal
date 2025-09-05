@@ -280,20 +280,20 @@
         </div>
     </section>
     
-    <div class="bg-blue-50 p-6 rounded-xl border border-blue-200 shadow-sm mx-auto w-fit fade-in-up">
-        <p class="flex items-center space-x-2 text-base font-medium text-slate-800">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/a/a5/Flag_of_the_United_Kingdom_%281-2%29.svg" alt="UK Flag" class="h-4 w-auto rounded-sm" />
+    <div class="py-6 text-xs text-gray-500 space-y-2 flex flex-col items-start mx-auto w-fit fade-in-up">
+        <p class="flex items-center space-x-1">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/a/a5/Flag_of_the_United_Kingdom_%281-2%29.svg" alt="UK Flag" class="h-2 w-auto rounded-sm" />
             <span>This site was created with the help of Gemini AI + ChatGPT</span>
         </p>
-        <p class="flex items-center space-x-2 text-base font-medium text-slate-800">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/b/ba/Flag_of_Germany.svg" alt="German Flag" class="h-4 w-auto rounded-sm" />
+        <p class="flex items-center space-x-1">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/b/ba/Flag_of_Germany.svg" alt="German Flag" class="h-2 w-auto rounded-sm" />
             <span>Diese Website wurde mithilfe von Gemini AI + ChatGPT erstellt</span>
         </p>
-        <p class="flex items-center space-x-2 text-base font-medium text-slate-800">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/7/73/Flag_of_Romania.svg" alt="Romanian Flag" class="h-4 w-auto rounded-sm" />
+        <p class="flex items-center space-x-1">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/7/73/Flag_of_Romania.svg" alt="Romanian Flag" class="h-2 w-auto rounded-sm" />
             <span>Acest site a fost creat cu ajutorul Gemini AI + ChatGPT</span>
         </p>
-        <p class="flex items-center space-x-2 hidden">
+        <p class="flex items-center space-x-1">
             <span class="font-bold text-slate-800">ID Utilizator:</span>
             <span id="user-id">Se încarcă...</span>
         </p>
@@ -312,7 +312,7 @@
 
         // Global variables provided by the Canvas environment
         const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
-        const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : null;
+        const firebaseConfig = JSON.parse(typeof __firebase_config !== 'undefined' ? __firebase_config : '{}');
         const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
 
         let app, db, auth;
@@ -342,10 +342,8 @@
         // Firebase Initialization and Authentication
         async function initializeFirebase() {
             try {
-                if (!firebaseConfig || Object.keys(firebaseConfig).length === 0) {
+                if (Object.keys(firebaseConfig).length === 0) {
                     console.error("Firebase config is missing. Cannot initialize Firestore.");
-                    // Hide the chat functionality if Firebase can't be initialized
-                    document.getElementById('demo').style.display = 'none'; 
                     return;
                 }
                 app = initializeApp(firebaseConfig);
@@ -431,7 +429,7 @@
             // Ensure the history is correctly sorted by timestamp
             history.sort((a, b) => {
                 const aTimestamp = a.parts[0].text.timestamp; // assuming timestamp is part of the text for simplicity
-                const bTimestamp = a.parts[0].text.timestamp;
+                const bTimestamp = b.parts[0].text.timestamp;
                 return aTimestamp - bTimestamp;
             });
             return history;
