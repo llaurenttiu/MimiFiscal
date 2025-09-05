@@ -159,6 +159,18 @@
             opacity: 1;
             transform: translateY(0);
         }
+
+        /* Credite section specific */
+        #credite .flag {
+            height: 20px; /* slightly bigger */
+            width: auto;
+        }
+        #credite p {
+            align-items: center;
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+        }
     </style>
 </head>
 <body class="bg-gradient-to-br from-gray-100 to-blue-50 text-slate-800">
@@ -283,6 +295,27 @@
             </div>
         </section>
 
+        <!-- ===== New Credits / About section (more visible, larger font, flags included) ===== -->
+        <section id="credite" class="py-12 bg-gray-100 fade-in-up">
+          <div class="max-w-3xl mx-auto text-center px-4">
+            <h3 class="text-2xl font-bold text-slate-800 mb-6">📌 Credite & Despre site</h3>
+            <div class="space-y-4 text-lg text-gray-800 font-medium">
+              <p>
+                <img class="flag" src="https://upload.wikimedia.org/wikipedia/commons/a/a5/Flag_of_the_United_Kingdom_%281-2%29.svg" alt="UK flag" />
+                <span>This site was created with the support of Gemini AI + ChatGPT</span>
+              </p>
+              <p>
+                <img class="flag" src="https://upload.wikimedia.org/wikipedia/commons/b/ba/Flag_of_Germany.svg" alt="DE flag" />
+                <span>Website erstellt mit Unterstützung von Gemini AI + ChatGPT</span>
+              </p>
+              <p>
+                <img class="flag" src="https://upload.wikimedia.org/wikipedia/commons/7/73/Flag_of_Romania.svg" alt="RO flag" />
+                <span>Site creat cu suportul Gemini AI + ChatGPT</span>
+              </p>
+            </div>
+          </div>
+        </section>
+
         <section id="contact" class="py-16 px-4 sm:px-6 text-center bg-gradient-to-b from-white to-gray-100 fade-in-up">
             <div class="max-w-xl mx-auto">
                 <h2 class="text-3xl font-bold mb-4 text-slate-800">Ai întrebări?</h2>
@@ -291,21 +324,6 @@
             </div>
         </section>
     </main>
-    
-    <aside class="py-6 text-xs text-gray-500 space-y-2 flex flex-col items-start mx-auto w-fit fade-in-up">
-        <p class="flex items-center space-x-1">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/a/a5/Flag_of_the_United_Kingdom_%281-2%29.svg" alt="Steagul Regatului Unit" class="h-2 w-auto rounded-sm" />
-            <span>This site was created with the help of Gemini AI + ChatGPT</span>
-        </p>
-        <p class="flex items-center space-x-1">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/b/ba/Flag_of_Germany.svg" alt="Steagul Germaniei" class="h-2 w-auto rounded-sm" />
-            <span>Diese Website wurde mithilfe von Gemini AI + ChatGPT erstellt</span>
-        </p>
-        <p class="flex items-center space-x-1">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/7/73/Flag_of_Romania.svg" alt="Steagul României" class="h-2 w-auto rounded-sm" />
-            <span>Acest site a fost creat cu ajutorul Gemini AI + ChatGPT</span>
-        </p>
-    </aside>
 
     <footer class="bg-gray-800 text-white py-2 text-center text-sm">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 flex flex-col items-center space-y-4">
