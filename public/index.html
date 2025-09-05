@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    
+    <!-- SEO Meta Tags -->
+    <title>MimiFiscal – Asistent fiscal digital pentru românii din Germania | Formular ANAF, Kindergeld, Dublă Impozitare</title>
+    <meta name="description" content="Servicii fiscale digitale pentru românii din Germania: completare automată formular ANAF pentru dubla impozitare, cerere Kindergeld cu traducere, consultanță AI fiscală gratuită.">
+    <meta name="keywords" content="formular ANAF Germania, Kindergeld Romania, dubla impozitare Germania Romania, asistent fiscal digital, formulare fiscale Germania, consultanta fiscala romani Germania">
+    <meta name="author" content="MimiFiscal - Laur">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://mimifiscal.com">
+    
+    <!-- Open Graph Tags (Facebook, LinkedIn) -->
+    <meta property="og:title" content="MimiFiscal – Asistent fiscal digital pentru românii din Germania">
+    <meta property="og:description" content="Simplifică birocrația fiscală! Formular ANAF pentru dubla impozitare, cerere Kindergeld automată, consultanță AI fiscală gratuită pentru românii din Germania.">
+    <meta property="og:image" content="https://mimifiscal.com/assets/mimifiscal-og-image.jpg">
+    <meta property="og:url" content="https://mimifiscal.com">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="MimiFiscal">
+    <meta property="og:locale" content="ro_RO">
+    <meta property="og:locale:alternate" content="de_DE">
+    
+    <!-- Twitter Card Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="MimiFiscal – Asistent fiscal digital pentru românii din Germania">
+    <meta name="twitter:description" content="Servicii fiscale digitale: formular ANAF, Kindergeld, consultanță AI fiscală gratuită pentru românii din Germania.">
+    <meta name="twitter:image" content="https://mimifiscal.com/assets/mimifiscal-twitter-card.jpg">
+    
+    <!-- Additional SEO Tags -->
+    <meta name="geo.region" content="DE">
+    <meta name="geo.placename" content="Germany">
+    <meta name="geo.position" content="51.165691;10.451526">
+    <meta name="ICBM" content="51.165691, 10.451526">
+    <meta name="language" content="Romanian">
+    <meta name="revisit-after" content="7 days">
+    
+    <!-- Structured Data (JSON-LD) -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "MimiFiscal",
+      "description": "Asistent fiscal digital pentru românii din Germania - Formular ANAF, Kindergeld, consultanță fiscală AI",
+      "url": "https://mimifiscal.com",
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": "https://mimifiscal.com/search?q={search_term_string}",
+        "query-input": "required name=search_term_string"
+      },
+      "author": {
+        "@type": "Person",
+        "name": "Laur"
+      },
+      "inLanguage": "ro",
+      "copyrightYear": "2025",
+      "audience": {
+        "@type": "Audience",
+        "geographicArea": "Germany",
+        "audienceType": "Romanian expatriates"
+      }
+    }
+    </script>
+    
+    <!-- Favicon and App Icons -->
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <meta name="theme-color" content="#1d4ed8">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .hero-gradient {
+            background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+        }
+        .glowing-border {
+            position: relative;
+            z-index: 10;
+        }
+        .glowing-border::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            border-radius: 1.5rem;
+            background: linear-gradient(45deg, #4299e1, #667eea, #9f7aea, #d53f8c);
+            z-index: -1;
+            filter: blur(8px);
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+        }
+        .glowing-border.glowing::before {
+            opacity: 1;
+        }
+        .message-bubble.user {
+            background-color: #3b82f6;
+            color: white;
+            border-bottom-right-radius: 0.5rem;
+            align-self: flex-end;
+            margin-left: auto;
+        }
+        .message-bubble.ai {
+            background-color: #e5e7eb;
+            color: #1f2937;
+            border-bottom-left-radius: 0.5rem;
+            align-self: flex-start;
+            margin-right: auto;
+        }
+        .chat-container {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        .loader {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #3b82f6;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            animation: spin 2s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .send-button {
+            transition: all 0.2s ease-in-out;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+        .send-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        .send-button:active {
+            transform: translateY(0);
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+        }
+        .service-card-icon {
+            transition: transform 0.3s ease-in-out;
+        }
+        .service-card:hover .service-card-icon {
+            transform: scale(1.1);
+        }
+        .fade-in-up {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+        .fade-in-up.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        #credite .flag {
+            height: 20px;
+            width: auto;
+        }
+        #credite p {
+            align-items: center;
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+        /* Stil mic pentru timestamps */
+        .timestamp {
+            font-size: 0.7rem;
+            color: #6b7280;
+            margin-top: 2px;
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-gray-100 to-blue-50 text-slate-800">
+
+    <!-- header ... (NE-SCHIMBAT) -->
+
+    <main>
+        <!-- sectiunile hero, servicii ... (NE-SCHIMBATE) -->
+
+        <section id="demo" class="py-16 px-4 sm:px-6 bg-gradient-to-b from-blue-100 to-white fade-in-up">
+            <div class="max-w-4xl mx-auto text-center">
+                <h2 class="text-3xl md:text-4xl font-bold mb-4 text-slate-800">💬 AI Fiscal</h2>
+                <p class="text-lg text-slate-600 mb-8">Întreabă robotul fiscal ce formular ai nevoie și ce taxe poți deduce.</p>
+                <div class="bg-red-100 text-red-700 border border-red-200 rounded-xl p-4 mb-6 shadow-sm" role="alert">
+                    <p class="font-semibold">Atenție:</p>
+                    <p class="text-sm">Informațiile furnizate pe acest site au caracter pur informativ și nu constituie consultanță fiscală. Pentru sfaturi personalizate, te rugăm să consulți un expert fiscal autorizat.</p>
+                </div>
+                <div class="bg-white p-6 md:p-8 rounded-2xl shadow-lg glowing-border text-left">
+                    <div id="chat-container" class="bg-gray-50 p-4 rounded-xl h-96 overflow-y-auto mb-4 border border-gray-200 chat-container" role="log" aria-live="polite" aria-label="Conversație cu asistentul fiscal AI">
+                        <div class="message-bubble ai p-3 my-2 rounded-xl max-w-[85%]">
+                            Salut, sunt MimiFiscal, asistentul tău digital. Întreabă-mă orice despre impozite și formulare fiscale!
+                            <div class="timestamp">ora {{now}}</div>
+                        </div>
+                    </div>
+                    <div class="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-3">
+                        <label for="user-input" class="sr-only">Întrebarea ta fiscală</label>
+                        <input type="text" id="user-input" placeholder="Scrie întrebarea ta..." class="flex-grow px-4 py-3 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500" aria-describedby="chat-help">
+                        <!-- Buton Trimite cu icon -->
+                        <button id="send-button" class="send-button bg-blue-700 text-white px-6 py-3 rounded-full hover:bg-blue-800 transition transform hover:scale-105 shadow-md flex items-center justify-center space-x-2" aria-label="Trimite întrebarea">
+                            <span>Trimite</span>
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14M12 5l7 7-7 7"/>
+                            </svg>
+                        </button>
+                    </div>
+                    <div id="chat-help" class="sr-only">Poți întreba despre formulare fiscale, impozite, Kindergeld și alte aspecte fiscale pentru românii din Germania</div>
+                    <div id="loading-indicator" class="hidden mt-4 flex items-center justify-center space-x-2" role="status" aria-live="polite">
+                        <div class="loader" aria-hidden="true"></div>
+                        <span class="text-sm text-slate-800">Se procesează...</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- doneaza, credite, contact ... (NE-SCHIMBATE) -->
+    </main>
+
+    <footer class="bg-gray-800 text-white py-2 text-center text-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 flex flex-col items-center space-y-4">
+            <p class="font-bold p-2 rounded-xl text-white">© 2025 MimiFiscal · Operat de Laur · GDPR Compliant</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const userInput = document.getElementById('user-input');
+            const sendButton = document.getElementById('send-button');
+            const chatContainer = document.getElementById('chat-container');
+            const loadingIndicator = document.getElementById('loading-indicator');
+            const tryFreeButton = document.getElementById('try-free-btn');
+            const chatCard = document.querySelector('#demo .bg-white');
+            const apiEndpoint = '/api/ask';
+            const STORAGE_KEY = "chat_history";
+
+            // funcție format oră
+            function getTimestamp() {
+                const now = new Date();
+                return now.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+            }
+
+            function addMessage(text, isUser = false) {
+                const wrapper = document.createElement('div');
+                wrapper.className = `message-bubble ${isUser ? 'user' : 'ai'} p-3 my-2 rounded-xl max-w-[85%]`;
+                wrapper.textContent = text;
+                const ts = document.createElement('div');
+                ts.className = "timestamp";
+                ts.textContent = getTimestamp();
+                wrapper.appendChild(ts);
+                chatContainer.appendChild(wrapper);
+                chatContainer.scrollTo({ top: chatContainer.scrollHeight, behavior: "smooth" });
+
+                saveChat();
+            }
+
+            function saveChat() {
+                localStorage.setItem(STORAGE_KEY, chatContainer.innerHTML);
+            }
+
+            function loadChat() {
+                const saved = localStorage.getItem(STORAGE_KEY);
+                if (saved) {
+                    chatContainer.innerHTML = saved;
+                }
+            }
+
+            async function sendMessage() {
+                const prompt = userInput.value.trim();
+                if (prompt === '') return;
+
+                addMessage(prompt, true);
+                userInput.value = '';
+                userInput.disabled = true;
+                sendButton.disabled = true;
+                loadingIndicator.classList.remove('hidden');
+
+                try {
+                    const controller = new AbortController();
+                    const timeoutId = setTimeout(() => controller.abort(), 12000);
+
+                    const response = await fetch(apiEndpoint, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ prompt: prompt }),
+                        signal: controller.signal
+                    });
+                    clearTimeout(timeoutId);
+
+                    if (!response.ok) {
+                        const errorText = await response.text();
+                        throw new Error(`API response status: ${response.status}. Body: ${errorText}`);
+                    }
+
+                    const result = await response.json();
+                    const text = result?.candidates?.[0]?.content?.parts?.[0]?.text || 'Nu am putut găsi un răspuns. Te rog să încerci din nou.';
+                    addMessage(text, false);
+                } catch (error) {
+                    console.error("Eroare la apelul către Vercel:", error);
+                    addMessage("A apărut o eroare la procesarea cererii. Te rog să încerci din nou.", false);
+                } finally {
+                    loadingIndicator.classList.add('hidden');
+                    userInput.disabled = false;
+                    sendButton.disabled = false;
+                    userInput.focus();
+                }
+            }
+
+            sendButton.addEventListener('click', sendMessage);
+            userInput.addEventListener('keydown', (event) => {
+                if (event.key === 'Enter') {
+                    event.preventDefault();
+                    sendMessage();
+                }
+            });
+
+            chatCard.addEventListener('mouseenter', () => chatCard.classList.add('glowing'));
+            chatCard.addEventListener('mouseleave', () => chatCard.classList.remove('glowing'));
+
+            if (tryFreeButton) {
+                tryFreeButton.addEventListener('click', () => {
+                    setTimeout(() => userInput.focus(), 100);
+                });
+            }
+
+            // load chat history
+            loadChat();
+
+            // ... rest meniu mobil si animatii scroll NE-SCHIMBATE
+        });
+    </script>
+</body>
+</html>
