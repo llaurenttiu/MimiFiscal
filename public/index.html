@@ -312,7 +312,7 @@
 
         // Global variables provided by the Canvas environment
         const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
-        const firebaseConfig = JSON.parse(typeof __firebase_config !== 'undefined' ? __firebase_config : '{}');
+        const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : null;
         const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
 
         let app, db, auth;
@@ -342,8 +342,10 @@
         // Firebase Initialization and Authentication
         async function initializeFirebase() {
             try {
-                if (Object.keys(firebaseConfig).length === 0) {
+                if (!firebaseConfig || Object.keys(firebaseConfig).length === 0) {
                     console.error("Firebase config is missing. Cannot initialize Firestore.");
+                    // Hide the chat functionality if Firebase can't be initialized
+                    document.getElementById('demo').style.display = 'none'; 
                     return;
                 }
                 app = initializeApp(firebaseConfig);
