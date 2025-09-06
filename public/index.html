@@ -393,7 +393,7 @@
         </div>
     </footer>
 
-    <script>
+ <script>
 document.addEventListener('DOMContentLoaded', () => {
   const userInput = document.getElementById('user-input');
   const sendButton = document.getElementById('send-button');
@@ -402,6 +402,13 @@ document.addEventListener('DOMContentLoaded', () => {
   const tryFreeButton = document.getElementById('try-free-btn');
   const chatCard = document.querySelector('#demo .bg-white');
   const apiEndpoint = '/api/ask';
+
+  let userScrolledUp = false;
+
+  chatContainer.addEventListener('scroll', () => {
+    const nearBottom = chatContainer.scrollHeight - chatContainer.scrollTop <= chatContainer.clientHeight + 50;
+    userScrolledUp = !nearBottom;
+  });
 
   function parseMarkdown(text) {
     return text
@@ -414,7 +421,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const messageDiv = document.createElement('div');
     messageDiv.className = `p-3 my-2 rounded-xl max-w-[85%] message-bubble ${isUser ? 'user' : 'ai'}`;
     chatContainer.appendChild(messageDiv);
-    chatContainer.scrollTop = chatContainer.scrollHeight;
 
     const cursor = document.createElement('span');
     cursor.className = 'typing-cursor';
@@ -423,18 +429,17 @@ document.addEventListener('DOMContentLoaded', () => {
     let i = 0;
 
     if (isUser) {
-      // Afișare simplă, fără HTML
       const interval = setInterval(() => {
         messageDiv.textContent = text.slice(0, i);
-        chatContainer.scrollTop = chatContainer.scrollHeight;
+        if (!userScrolledUp) chatContainer.scrollTop = chatContainer.scrollHeight;
         i++;
         if (i > text.length) {
           clearInterval(interval);
           cursor.remove();
+          messageDiv.classList.add('is-visible');
         }
       }, 20);
     } else {
-      // Afișare cu HTML procesat
       const parsedHTML = parseMarkdown(text);
       const tempDiv = document.createElement('div');
       tempDiv.innerHTML = parsedHTML;
@@ -455,7 +460,7 @@ document.addEventListener('DOMContentLoaded', () => {
           const fullText = nodes[currentNodeIndex].textContent;
           activeNode.textContent += fullText.charAt(currentCharIndex);
           currentCharIndex++;
-          chatContainer.scrollTop = chatContainer.scrollHeight;
+          if (!userScrolledUp) chatContainer.scrollTop = chatContainer.scrollHeight;
 
           if (currentCharIndex >= fullText.length) {
             currentNodeIndex++;
@@ -466,7 +471,8 @@ document.addEventListener('DOMContentLoaded', () => {
         if (currentNodeIndex >= nodes.length) {
           clearInterval(interval);
           cursor.remove();
-          chatContainer.scrollTop = chatContainer.scrollHeight;
+          messageDiv.classList.add('is-visible');
+          if (!userScrolledUp) chatContainer.scrollTop = chatContainer.scrollHeight;
         }
       }
 
@@ -565,8 +571,10 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 });
 </script>
+
 </body>
 </html>
+
 
 
 
