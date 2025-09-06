@@ -391,9 +391,12 @@ document.addEventListener('DOMContentLoaded', () => {
   const chatCard = document.querySelector('#demo .bg-white');
   const apiEndpoint = '/api/ask';
 
-  // 🔧 Transformă **text** în <strong>text>
+  // 🔧 Curăță textul și transformă **text** în <strong>text>
   function parseMarkdown(text) {
-    return text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+    return text
+      .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') // bold
+      .replace(/(^|\s)\*(.*?)\*(\s|$)/g, '$1$2$3')      // elimină *italic*
+      .replace(/#/g, '');                               // elimină simbolul #
   }
 
   // ✍️ Scriere literă cu literă din HTML procesat
@@ -538,6 +541,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 </body>
 </html>
+
 
 
 
