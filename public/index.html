@@ -403,54 +403,31 @@ document.addEventListener('DOMContentLoaded', () => {
     messageDiv.className = `p-3 my-2 rounded-xl max-w-[85%] message-bubble ${isUser ? 'user' : 'ai'}`;
     chatContainer.appendChild(messageDiv);
 
-    const parsedHTML = isUser ? text : parseMarkdown(text); // 👈 doar AI primește formatare
-    const tempDiv = document.createElement('div');
-    tempDiv.innerHTML = parsedHTML;
-    const nodes = Array.from(tempDiv.childNodes);
-
-    let currentNodeIndex = 0;
-    let currentCharIndex = 0;
-    let activeNode = null;
-
     const cursor = document.createElement('span');
     cursor.className = 'typing-cursor';
     messageDiv.appendChild(cursor);
 
-    function typeNext() {
-      if (!activeNode && currentNodeIndex < nodes.length) {
-        activeNode = nodes[currentNodeIndex].cloneNode();
-        messageDiv.insertBefore(activeNode, cursor);
-        currentCharIndex = 0;
-      }
-
-      if (activeNode) {
-        const fullText = nodes[currentNodeIndex].textContent;
-        activeNode.textContent += fullText.charAt(currentCharIndex);
-        currentCharIndex++;
-
-        chatContainer.scrollTop = chatContainer.scrollHeight;
-
-        if (currentCharIndex >= fullText.length) {
-          currentNodeIndex++;
-          activeNode = null;
-        }
-      }
-
-      if (currentNodeIndex >= nodes.length) {
+    let i = 0;
+    const sourceText = isUser ? text : parseMarkdown(text);
+    const interval = setInterval(() => {
+      const current = messageDiv.innerHTML.replace(cursor.outerHTML, '');
+      const nextChar = sourceText.charAt(i);
+      messageDiv.innerHTML = current + nextChar + cursor.outerHTML;
+      chatContainer.scrollTop = chatContainer.scrollHeight;
+      i++;
+      if (i >= sourceText.length) {
         clearInterval(interval);
-        cursor.remove();
+        messageDiv.innerHTML = current + sourceText;
         chatContainer.scrollTop = chatContainer.scrollHeight;
       }
-    }
-
-    const interval = setInterval(typeNext, 20);
+    }, 20);
   }
 
   async function sendMessage() {
     const prompt = userInput.value.trim();
     if (prompt === '') return;
 
-    addMessageAnimated(prompt, true); // 👈 afișăm exact ce a scris utilizatorul
+    addMessageAnimated(prompt, true);
     userInput.value = '';
     userInput.disabled = true;
     sendButton.disabled = true;
@@ -470,7 +447,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
       const result = await response.json();
       const text = result?.candidates?.[0]?.content?.parts?.[0]?.text || 'Nu am putut găsi un răspuns. Te rog să încerci din nou.';
-      addMessageAnimated(text, false); // 👈 AI primește formatare
+      addMessageAnimated(text, false);
     } catch (error) {
       console.error("Eroare la apelul către Vercel:", error);
       addMessageAnimated(`A apărut o eroare la procesarea cererii. Te rog să încerci din nou.`, false);
@@ -541,6 +518,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 </body>
 </html>
+
 
 
 
