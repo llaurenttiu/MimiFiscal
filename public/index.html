@@ -381,7 +381,7 @@
         </div>
     </footer>
 
-    <script>
+   <script>
 document.addEventListener('DOMContentLoaded', () => {
     const userInput = document.getElementById('user-input');
     const sendButton = document.getElementById('send-button');
@@ -391,27 +391,34 @@ document.addEventListener('DOMContentLoaded', () => {
     const chatCard = document.querySelector('#demo .bg-white');
     const apiEndpoint = '/api/ask';
 
-    function addMessageAnimated(text, isUser = false) {
-  const messageDiv = document.createElement('div');
-  messageDiv.className = `p-3 my-2 rounded-xl max-w-[85%] message-bubble ${isUser ? 'user' : 'ai'}`;
-  chatContainer.appendChild(messageDiv);
-  chatContainer.scrollTop = chatContainer.scrollHeight;
-
-  const cursor = document.createElement('span');
-  cursor.className = 'typing-cursor';
-  messageDiv.appendChild(cursor);
-
-  let i = 0;
-  const interval = setInterval(() => {
-    messageDiv.insertBefore(document.createTextNode(text.charAt(i)), cursor);
-    i++;
-    if (i >= text.length) {
-      clearInterval(interval);
-      cursor.remove(); // elimină cursorul când s-a terminat
+    // 🔧 Transformă **text** în <strong>text>
+    function parseMarkdown(text) {
+        return text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
     }
-  }, 20);
-}
 
+    // ✍️ Afișare literă cu literă + cursor fals
+    function addMessageAnimated(text, isUser = false) {
+        const messageDiv = document.createElement('div');
+        messageDiv.className = `p-3 my-2 rounded-xl max-w-[85%] message-bubble ${isUser ? 'user' : 'ai'}`;
+        chatContainer.appendChild(messageDiv);
+        chatContainer.scrollTop = chatContainer.scrollHeight;
+
+        const parsedText = parseMarkdown(text);
+        const cursor = document.createElement('span');
+        cursor.className = 'typing-cursor';
+        messageDiv.innerHTML = cursor.outerHTML;
+
+        let i = 0;
+        const interval = setInterval(() => {
+            const current = messageDiv.innerHTML.replace(cursor.outerHTML, '');
+            messageDiv.innerHTML = current + parsedText.charAt(i) + cursor.outerHTML;
+            i++;
+            if (i >= parsedText.length) {
+                clearInterval(interval);
+                messageDiv.innerHTML = current + parsedText;
+            }
+        }, 20);
+    }
 
     async function sendMessage() {
         const prompt = userInput.value.trim();
@@ -508,6 +515,7 @@ document.addEventListener('DOMContentLoaded', () => {
 </script>
 </body>
 </html>
+
 
 
 
