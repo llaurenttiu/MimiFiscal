@@ -478,8 +478,58 @@
                 observer.observe(element);
             });
         });
+        function addMessageAnimated(text, isUser = false) {
+  const messageDiv = document.createElement('div');
+  messageDiv.className = `p-3 my-2 rounded-xl max-w-[85%] message-bubble ${isUser ? 'user' : 'ai'}`;
+  chatContainer.appendChild(messageDiv);
+  chatContainer.scrollTop = chatContainer.scrollHeight;
+
+  let i = 0;
+  const interval = setInterval(() => {
+    messageDiv.textContent += text.charAt(i);
+    i++;
+    if (i >= text.length) clearInterval(interval);
+  }, 20);
+}
+
+async function sendMessage() {
+  const prompt = userInput.value.trim();
+  if (prompt === '') return;
+  addMessageAnimated(prompt, true);
+  userInput.value = '';
+  userInput.disabled = true;
+  sendButton.disabled = true;
+  loadingIndicator.classList.remove('hidden');
+
+  try {
+    const response = await fetch('/api/ask', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ prompt: prompt })
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(`API response status: ${response.status}. Body: ${errorText}`);
+    }
+
+    const result = await response.json();
+    const text = result?.candidates?.[0]?.content?.parts?.[0]?.text || 'Nu am putut găsi un răspuns. Te rog să încerci din nou.';
+    addMessageAnimated(text, false);
+  } catch (error) {
+    console.error("Eroare la apelul către Vercel:", error);
+    addMessageAnimated(`A apărut o eroare la procesarea cererii. Te rog să încerci din nou.`, false);
+  } finally {
+    loadingIndicator.classList.add('hidden');
+    userInput.disabled = false;
+    sendButton.disabled = false;
+    userInput.focus();
+  }
+}
+
     </script>
 </body>
 </html>
+
 
 
