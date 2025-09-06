@@ -403,7 +403,7 @@ document.addEventListener('DOMContentLoaded', () => {
     messageDiv.className = `p-3 my-2 rounded-xl max-w-[85%] message-bubble ${isUser ? 'user' : 'ai'}`;
     chatContainer.appendChild(messageDiv);
 
-    const parsedHTML = parseMarkdown(text);
+    const parsedHTML = isUser ? text : parseMarkdown(text); // 👈 doar AI primește formatare
     const tempDiv = document.createElement('div');
     tempDiv.innerHTML = parsedHTML;
     const nodes = Array.from(tempDiv.childNodes);
@@ -428,7 +428,7 @@ document.addEventListener('DOMContentLoaded', () => {
         activeNode.textContent += fullText.charAt(currentCharIndex);
         currentCharIndex++;
 
-        chatContainer.scrollTop = chatContainer.scrollHeight; // 👈 scroll automat
+        chatContainer.scrollTop = chatContainer.scrollHeight;
 
         if (currentCharIndex >= fullText.length) {
           currentNodeIndex++;
@@ -450,9 +450,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const prompt = userInput.value.trim();
     if (prompt === '') return;
 
-    const cleanPrompt = parseMarkdown(prompt); // 👈 elimină stelute și diez
-    addMessageAnimated(cleanPrompt, true);      // 👈 afișează doar o dată
-
+    addMessageAnimated(prompt, true); // 👈 afișăm exact ce a scris utilizatorul
     userInput.value = '';
     userInput.disabled = true;
     sendButton.disabled = true;
@@ -472,7 +470,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
       const result = await response.json();
       const text = result?.candidates?.[0]?.content?.parts?.[0]?.text || 'Nu am putut găsi un răspuns. Te rog să încerci din nou.';
-      addMessageAnimated(text, false);
+      addMessageAnimated(text, false); // 👈 AI primește formatare
     } catch (error) {
       console.error("Eroare la apelul către Vercel:", error);
       addMessageAnimated(`A apărut o eroare la procesarea cererii. Te rog să încerci din nou.`, false);
@@ -543,6 +541,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 </body>
 </html>
+
 
 
 
