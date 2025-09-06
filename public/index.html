@@ -198,6 +198,11 @@
     transform: translateY(0);
   }
 }
+  #scroll-to-bottom {
+  font-weight: 600;
+  font-size: 0.875rem;
+}
+      
  </style>
 </head>
 <body class="bg-gradient-to-br from-gray-100 to-blue-50 text-slate-800">
@@ -290,6 +295,10 @@
                         <div class="message-bubble ai p-3 my-2 rounded-xl max-w-[85%]">
                             Salut, sunt MimiFiscal, asistentul tău digital. Întreabă-mă orice despre impozite și formulare fiscale!
                         </div>
+                        <button id="scroll-to-bottom" class="hidden fixed bottom-24 right-6 bg-blue-600 text-white px-4 py-2 rounded-full shadow-lg hover:bg-blue-700 transition z-50">
+  ⬇️ Revină la ultimul mesaj
+</button>
+
                     </div>
                     <div class="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-3">
                         <label for="user-input" class="sr-only">Întrebarea ta fiscală</label>
@@ -393,7 +402,7 @@
         </div>
     </footer>
 
- <script>
+<script>
 document.addEventListener('DOMContentLoaded', () => {
   const userInput = document.getElementById('user-input');
   const sendButton = document.getElementById('send-button');
@@ -401,6 +410,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const loadingIndicator = document.getElementById('loading-indicator');
   const tryFreeButton = document.getElementById('try-free-btn');
   const chatCard = document.querySelector('#demo .bg-white');
+  const scrollButton = document.getElementById('scroll-to-bottom');
   const apiEndpoint = '/api/ask';
 
   let userScrolledUp = false;
@@ -408,6 +418,11 @@ document.addEventListener('DOMContentLoaded', () => {
   chatContainer.addEventListener('scroll', () => {
     const nearBottom = chatContainer.scrollHeight - chatContainer.scrollTop <= chatContainer.clientHeight + 50;
     userScrolledUp = !nearBottom;
+    scrollButton.classList.toggle('hidden', !userScrolledUp);
+  });
+
+  scrollButton.addEventListener('click', () => {
+    chatContainer.scrollTop = chatContainer.scrollHeight;
   });
 
   function parseMarkdown(text) {
@@ -571,9 +586,9 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 });
 </script>
-
 </body>
 </html>
+
 
 
 
