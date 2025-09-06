@@ -408,7 +408,14 @@ document.addEventListener('DOMContentLoaded', () => {
     messageDiv.appendChild(cursor);
 
     let i = 0;
-    const sourceText = isUser ? text : parseMarkdown(text);
+    let sourceText = text;
+
+    if (!isUser) {
+      const tempDiv = document.createElement('div');
+      tempDiv.innerHTML = parseMarkdown(text);
+      sourceText = tempDiv.innerHTML;
+    }
+
     const interval = setInterval(() => {
       const current = messageDiv.innerHTML.replace(cursor.outerHTML, '');
       const nextChar = sourceText.charAt(i);
@@ -516,8 +523,10 @@ document.addEventListener('DOMContentLoaded', () => {
 </script>
 
 
+
 </body>
 </html>
+
 
 
 
