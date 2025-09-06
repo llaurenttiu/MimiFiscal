@@ -381,7 +381,7 @@
         </div>
     </footer>
 
- <script>
+<script>
 document.addEventListener('DOMContentLoaded', () => {
   const userInput = document.getElementById('user-input');
   const sendButton = document.getElementById('send-button');
@@ -396,29 +396,51 @@ document.addEventListener('DOMContentLoaded', () => {
     return text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
   }
 
-  // ✍️ Afișare literă cu literă + cursor fals
+  // ✍️ Scriere literă cu literă din HTML procesat
   function addMessageAnimated(text, isUser = false) {
     const messageDiv = document.createElement('div');
     messageDiv.className = `p-3 my-2 rounded-xl max-w-[85%] message-bubble ${isUser ? 'user' : 'ai'}`;
     chatContainer.appendChild(messageDiv);
     chatContainer.scrollTop = chatContainer.scrollHeight;
 
-    const parsedText = parseMarkdown(text);
+    const parsedHTML = parseMarkdown(text);
+    const tempDiv = document.createElement('div');
+    tempDiv.innerHTML = parsedHTML;
+    const nodes = Array.from(tempDiv.childNodes);
+
+    let currentNodeIndex = 0;
+    let currentCharIndex = 0;
+    let activeNode = null;
+
     const cursor = document.createElement('span');
     cursor.className = 'typing-cursor';
-    messageDiv.innerHTML = cursor.outerHTML;
+    messageDiv.appendChild(cursor);
 
-    let i = 0;
-    const interval = setInterval(() => {
-      const current = messageDiv.innerHTML.replace(cursor.outerHTML, '');
-      const nextChar = parsedText.charAt(i);
-      messageDiv.innerHTML = current + nextChar + cursor.outerHTML;
-      i++;
-      if (i >= parsedText.length) {
-        clearInterval(interval);
-        messageDiv.innerHTML = current + parsedText;
+    function typeNext() {
+      if (!activeNode && currentNodeIndex < nodes.length) {
+        activeNode = nodes[currentNodeIndex].cloneNode();
+        messageDiv.insertBefore(activeNode, cursor);
+        currentCharIndex = 0;
       }
-    }, 20);
+
+      if (activeNode) {
+        const fullText = nodes[currentNodeIndex].textContent;
+        activeNode.textContent += fullText.charAt(currentCharIndex);
+        currentCharIndex++;
+
+        if (currentCharIndex >= fullText.length) {
+          currentNodeIndex++;
+          activeNode = null;
+        }
+      }
+
+      if (currentNodeIndex >= nodes.length) {
+        clearInterval(interval);
+        cursor.remove();
+      }
+    }
+
+    const interval = setInterval(typeNext, 20);
   }
 
   async function sendMessage() {
@@ -478,7 +500,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }, 100);
   });
 
-  // Meniu mobil
   const mobileMenuButton = document.getElementById('mobile-menu-button');
   const mobileMenu = document.getElementById('mobile-menu');
 
@@ -492,7 +513,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // Animație scroll
   const observerOptions = {
     root: null,
     rootMargin: '0px',
@@ -515,8 +535,10 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 </script>
 
+
 </body>
 </html>
+
 
 
 
