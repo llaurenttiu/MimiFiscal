@@ -431,6 +431,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     for (let line of lines) {
       const trimmed = line.trim();
+
       if (/^(\*|-)\s+/.test(trimmed)) {
         if (!inList) {
           html += '<ul>';
@@ -443,14 +444,17 @@ document.addEventListener('DOMContentLoaded', () => {
           html += '</ul>';
           inList = false;
         }
+
         html += line
           .replace(/\*\*\*(.*?)\*\*\*/g, '<strong>$1</strong>')
           .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
           .replace(/\*(.*?)\*/g, '$1')
+          .replace(/(^|\s)\*(\s|$)/g, '')
           .replace(/#/g, '')
           .replace(/_/g, '');
       }
     }
+
     if (inList) html += '</ul>';
     return html;
   }
@@ -609,8 +613,10 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 });
 </script>
+
 </body>
 </html>
+
 
 
 
