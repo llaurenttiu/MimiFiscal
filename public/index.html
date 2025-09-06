@@ -391,20 +391,17 @@ document.addEventListener('DOMContentLoaded', () => {
   const chatCard = document.querySelector('#demo .bg-white');
   const apiEndpoint = '/api/ask';
 
-  // 🔧 Curăță textul și transformă **text** în <strong>text>
   function parseMarkdown(text) {
     return text
-      .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') // bold
-      .replace(/(^|\s)\*(.*?)\*(\s|$)/g, '$1$2$3')      // elimină *italic*
-      .replace(/#/g, '');                               // elimină simbolul #
+      .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+      .replace(/(^|\s)\*(.*?)\*(\s|$)/g, '$1$2$3')
+      .replace(/#/g, '');
   }
 
-  // ✍️ Scriere literă cu literă din HTML procesat
   function addMessageAnimated(text, isUser = false) {
     const messageDiv = document.createElement('div');
     messageDiv.className = `p-3 my-2 rounded-xl max-w-[85%] message-bubble ${isUser ? 'user' : 'ai'}`;
     chatContainer.appendChild(messageDiv);
-    chatContainer.scrollTop = chatContainer.scrollHeight;
 
     const parsedHTML = parseMarkdown(text);
     const tempDiv = document.createElement('div');
@@ -431,6 +428,8 @@ document.addEventListener('DOMContentLoaded', () => {
         activeNode.textContent += fullText.charAt(currentCharIndex);
         currentCharIndex++;
 
+        chatContainer.scrollTop = chatContainer.scrollHeight; // 👈 scroll automat
+
         if (currentCharIndex >= fullText.length) {
           currentNodeIndex++;
           activeNode = null;
@@ -440,6 +439,7 @@ document.addEventListener('DOMContentLoaded', () => {
       if (currentNodeIndex >= nodes.length) {
         clearInterval(interval);
         cursor.remove();
+        chatContainer.scrollTop = chatContainer.scrollHeight;
       }
     }
 
@@ -450,7 +450,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const prompt = userInput.value.trim();
     if (prompt === '') return;
 
-    addMessageAnimated(prompt, true);
+    const cleanPrompt = parseMarkdown(prompt); // 👈 elimină stelute și diez
+    addMessageAnimated(cleanPrompt, true);      // 👈 afișează doar o dată
+
     userInput.value = '';
     userInput.disabled = true;
     sendButton.disabled = true;
@@ -541,6 +543,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 </body>
 </html>
+
 
 
 
