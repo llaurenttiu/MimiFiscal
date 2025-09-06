@@ -297,7 +297,18 @@
 
          <!-- ===== Updated Credits section - now more discrete ===== -->
 
-   <style>
+  <style>
+  body {
+    font-family: 'Inter', sans-serif;
+  }
+
+  .hero-gradient {
+    background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+  }
+
+  /* ... alte stiluri existente ... */
+
+  /* Stiluri pentru steagurile din secțiunea #credite */
   #credite .flag {
     width: 15px;
     height: 10px;
@@ -305,7 +316,20 @@
     margin-right: 0.5rem;
     vertical-align: middle;
   }
+
+  @media (max-width: 480px) {
+    #credite .flag {
+      width: 12px;
+      height: 8px;
+      margin-right: 0.4rem;
+    }
+
+    #credite p {
+      font-size: 0.875rem;
+    }
+  }
 </style>
+
 
 <section id="credite" class="py-6 bg-gray-800 fade-in-up">
   <div class="max-w-3xl mx-auto text-left px-4">
@@ -457,4 +481,5 @@
     </script>
 </body>
 </html>
+
 
