@@ -401,7 +401,6 @@
             <p class="font-bold p-2 rounded-xl text-white">© 2025 MimiFiscal · Operat de Laur · GDPR Compliant</p>
         </div>
     </footer>
-
 <script>
 document.addEventListener('DOMContentLoaded', () => {
   const userInput = document.getElementById('user-input');
@@ -426,7 +425,6 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   function parseMarkdown(text) {
-    // Transformă listele Markdown în <ul><li>
     const lines = text.split('\n');
     let html = '';
     let inList = false;
@@ -445,11 +443,12 @@ document.addEventListener('DOMContentLoaded', () => {
           html += '</ul>';
           inList = false;
         }
-        html += line.replace(/\*\*\*(.*?)\*\*\*/g, '<strong>$1</strong>')
-                    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-                    .replace(/\*(.*?)\*/g, '$1')
-                    .replace(/#/g, '')
-                    .replace(/_/g, '');
+        html += line
+          .replace(/\*\*\*(.*?)\*\*\*/g, '<strong>$1</strong>')
+          .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+          .replace(/\*(.*?)\*/g, '$1')
+          .replace(/#/g, '')
+          .replace(/_/g, '');
       }
     }
     if (inList) html += '</ul>';
@@ -612,6 +611,7 @@ document.addEventListener('DOMContentLoaded', () => {
 </script>
 </body>
 </html>
+
 
 
 
