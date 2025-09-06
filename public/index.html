@@ -1,0 +1,441 @@
+<!doctype html>
+<html lang="ro">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    
+    <title>mimifiscal – asistent fiscal digital pentru românii din germania | formular anaf, kindergeld, dublă impozitare</title>
+    <meta name="description" content="servicii fiscale digitale pentru românii din germania: completare automată formular anaf pentru dubla impozitare, cerere kindergeld cu traducere, consultanță ai fiscală gratuită.">
+    <meta name="keywords" content="formular anaf germania, kindergeld romania, dubla impozitare germania romania, asistent fiscal digital, formulare fiscale germania, consultanta fiscala romani germania">
+    <meta name="author" content="mimifiscal - laur">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://mimifiscal.com">
+    
+    <meta property="og:title" content="mimifiscal – asistent fiscal digital pentru românii din germania">
+    <meta property="og:description" content="simplifică birocrația fiscală! formular anaf pentru dubla impozitare, cerere kindergeld automată, consultanță ai fiscală gratuită pentru românii din germania.">
+    <meta property="og:image" content="https://mimifiscal.com/assets/mimifiscal-og-image.jpg">
+    <meta property="og:url" content="https://mimifiscal.com">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="mimifiscal">
+    <meta property="og:locale" content="ro_ro">
+    <meta property="og:locale:alternate" content="de_de">
+    
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="mimifiscal – asistent fiscal digital pentru românii din germania">
+    <meta name="twitter:description" content="servicii fiscale digitale: formular anaf, kindergeld, consultanță ai fiscală gratuită pentru românii din germania.">
+    <meta name="twitter:image" content="https://mimifiscal.com/assets/mimifiscal-twitter-card.jpg">
+    
+    <meta name="geo.region" content="de">
+    <meta name="geo.placename" content="germany">
+    <meta name="geo.position" content="51.165691;10.451526">
+    <meta name="icbm" content="51.165691, 10.451526">
+    <meta name="language" content="romanian">
+    <meta name="revisit-after" content="7 days">
+    
+    <script type="application/ld+json">
+    {
+      "context": "https://schema.org",
+      "type": "website",
+      "name": "mimifiscal",
+      "description": "asistent fiscal digital pentru românii din germania - formular anaf, kindergeld, consultanță fiscală ai",
+      "url": "https://mimifiscal.com",
+      "potentialaction": {
+        "type": "searchaction",
+        "target": "https://mimifiscal.com/search?q={search_term_string}",
+        "query-input": "required name=search_term_string"
+      },
+      "author": {
+        "type": "person",
+        "name": "laur"
+      },
+      "inlanguage": "ro",
+      "copyrightyear": "2025",
+      "audience": {
+        "type": "audience",
+        "geographicarea": "germany",
+        "audiencetype": "romanian expatriates"
+      }
+    }
+    </script>
+    
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <meta name="theme-color" content="#1d4ed8">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'inter', sans-serif; }
+        .hero-gradient {
+            background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+        }
+        .glowing-border {
+            position: relative;
+            z-index: 10;
+        }
+        .glowing-border::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            border-radius: 1.5rem;
+            background: linear-gradient(45deg, #4299e1, #667eea, #9f7aea, #d53f8c);
+            z-index: -1;
+            filter: blur(8px);
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+        }
+        .glowing-border.glowing::before {
+            opacity: 1;
+        }
+        .message-bubble.user {
+            background-color: #3b82f6;
+            color: white;
+            border-bottom-right-radius: 0.5rem;
+            align-self: flex-end;
+            margin-left: auto;
+        }
+        .message-bubble.ai {
+            background-color: #e5e7eb;
+            color: #1f2937;
+            border-bottom-left-radius: 0.5rem;
+            align-self: flex-start;
+            margin-right: auto;
+        }
+        .chat-container {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        /* new spinner animation */
+        .loader {
+            border: 4px solid #f3f3f3; /* light grey */
+            border-top: 4px solid #3b82f6; /* blue */
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            animation: spin 2s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .send-button {
+            transition: all 0.2s ease-in-out;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+        .send-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        .send-button:active {
+            transform: translateY(0);
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+        }
+        .service-card-icon {
+            transition: transform 0.3s ease-in-out;
+        }
+        .service-card:hover .service-card-icon {
+            transform: scale(1.1);
+        }
+        /* css pentru animația de scroll */
+        .fade-in-up {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+        .fade-in-up.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* credite section specific */
+        #credite .flag {
+            height: 16px; /* Reduced flag size */
+            width: auto;
+        }
+        #credite p {
+            align-items: center;
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            font-size: 0.9rem; /* Reduced font size */
+            color: #6b7280; /* Softer gray color */
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-gray-100 to-blue-50 text-slate-800">
+
+    <header class="bg-white border-b border-gray-200 shadow-sm sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex justify-between items-center relative">
+            <a href="#" class="flex items-center text-xl font-bold text-blue-700 hover:text-blue-900 transition-colors">
+                <span>mimifiscal</span>
+                <img src="https://upload.wikimedia.org/wikipedia/commons/b/ba/flag_of_germany.svg" alt="steagul germaniei" class="h-6 w-auto ml-2 rounded-sm" />
+                <img src="https://upload.wikimedia.org/wikipedia/commons/7/73/flag_of_romania.svg" alt="steagul româniei" class="h-6 w-auto ml-1 rounded-sm" />
+            </a>
+            
+            <button id="mobile-menu-button" class="md:hidden text-gray-500 hover:text-blue-600 focus:outline-none focus:text-blue-600 transition-colors" aria-label="deschide meniul de navigare">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                </svg>
+            </button>
+
+            <nav id="mobile-menu" class="hidden md:flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4 text-sm font-medium text-slate-600 md:relative md:bg-transparent md:p-0 absolute top-full left-0 right-0 bg-white border-t border-gray-200 shadow-lg p-4 z-40" aria-label="navigare principală">
+                <a href="#servicii" class="hover:text-blue-700 transition-colors block px-2 py-1">servicii</a>
+                <a href="#doneaza" class="hover:text-blue-700 transition-colors block px-2 py-1">donații</a>
+                <a href="#contact" class="hover:text-blue-700 transition-colors block px-2 py-1">contact</a>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero-gradient text-center py-24 px-4 relative overflow-hidden fade-in-up">
+            <div class="max-w-4xl mx-auto relative z-10">
+                <h1 class="text-4xl md:text-5xl font-extrabold text-blue-900 mb-6 leading-tight">
+                    simplificăm birocrația pentru românii din germania
+                </h1>
+                <p class="text-lg md:text-xl text-slate-700 mb-8 px-4">
+                    formulare fiscale, kindergeld, dublă impozitare, totul completat automat și explicat simplu.
+                </p>
+                <a href="#demo" id="try-free-btn" class="bg-blue-700 text-white px-10 py-4 rounded-full text-base font-semibold hover:bg-blue-800 transition transform hover:scale-105 shadow-lg" aria-label="Încearcă serviciul gratuit">
+                    Încearcă gratuit
+                </a>
+            </div>
+            <div class="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-gray-100 to-transparent"></div>
+        </section>
+
+        <section id="servicii" class="py-16 px-4 sm:px-6 bg-gradient-to-b from-gray-100 to-white fade-in-up">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl md:text-4xl font-bold text-slate-800 mb-4">ce oferim</h2>
+                <p class="text-lg text-slate-600">servicii digitale create special pentru nevoile tale.</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+                <article class="service-card bg-gradient-to-br from-white to-green-100 p-8 rounded-2xl shadow-lg hover:shadow-xl hover:scale-[1.02] transition-transform duration-300 flex flex-col items-center text-center">
+                    <div class="service-card-icon bg-green-100 text-green-700 rounded-full p-4 mb-4" aria-hidden="true">
+                        <svg class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5h7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2 text-slate-900">📄 formular anaf</h3>
+                    <p class="text-base text-slate-600 mb-6">evită dubla impozitare de-ro: completare + generare pdf</p>
+                    <a href="assets/cerererezidentafiscala.pdf" download="cerererezidentafiscala.pdf" class="mt-auto bg-blue-600 text-white px-8 py-3 rounded-full hover:bg-blue-700 transition transform hover:-translate-y-1 inline-block font-semibold" aria-label="descarcă formularul anaf pentru dubla impozitare">
+                        descarcă
+                    </a>
+                </article>
+                <article class="service-card bg-gradient-to-br from-white to-yellow-100 p-8 rounded-2xl shadow-lg hover:shadow-xl hover:scale-[1.02] transition-transform duration-300 flex flex-col items-center text-center">
+                    <div class="service-card-icon bg-yellow-100 text-yellow-700 rounded-full p-4 mb-4" aria-hidden="true">
+                        <svg class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m9-6v12m-15-6v12" />
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2 text-slate-900">👨‍👩‍👧 kindergeld</h3>
+                    <p class="text-base text-slate-600 mb-6">cerere automată + traducere în română. ghid complet pas cu pas.</p>
+                    <a href="https://www.arbeitsagentur.de/familie-und-kinder/downloads-familie-und-kinder/formulare-kindergeld" target="_blank" rel="noopener noreferrer" class="mt-auto bg-blue-600 text-white px-8 py-3 rounded-full hover:bg-blue-700 transition transform hover:-translate-y-1 inline-block font-semibold" aria-label="accesează formularul kindergeld (deschide în fereastră nouă)">
+                        accesează
+                    </a>
+                </article>
+            </div>
+        </section>
+
+        <hr class="my-10 max-w-7xl mx-auto border-gray-300">
+
+        <section id="demo" class="py-16 px-4 sm:px-6 bg-gradient-to-b from-blue-100 to-white fade-in-up">
+            <div class="max-w-4xl mx-auto text-center">
+                <h2 class="text-3xl md:text-4xl font-bold mb-4 text-slate-800">💬 ai fiscal</h2>
+                <p class="text-lg text-slate-600 mb-8">Întreabă robotul fiscal ce formular ai nevoie și ce taxe poți deduce.</p>
+                <div class="bg-red-100 text-red-700 border border-red-200 rounded-xl p-4 mb-6 shadow-sm" role="alert">
+                    <p class="font-semibold">atenție:</p>
+                    <p class="text-sm">informațiile furnizate pe acest site au caracter pur informativ și nu constituie consultanță fiscală. pentru sfaturi personalizate, te rugăm să consulți un expert fiscal autorizat.</p>
+                </div>
+                <div class="bg-white p-6 md:p-8 rounded-2xl shadow-lg glowing-border text-left">
+                    <div id="chat-container" class="bg-gray-50 p-4 rounded-xl h-96 overflow-y-auto mb-4 border border-gray-200 chat-container" role="log" aria-live="polite" aria-label="conversație cu asistentul fiscal ai">
+                        <div class="message-bubble ai p-3 my-2 rounded-xl max-w-[85%]">
+                            salut, sunt mimifiscal, asistentul tău digital. Întreabă-mă orice despre impozite și formulare fiscale!
+                        </div>
+                    </div>
+                    <div class="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-3">
+                        <label for="user-input" class="sr-only">Întrebarea ta fiscală</label>
+                        <input type="text" id="user-input" placeholder="scrie întrebarea ta..." class="flex-grow px-4 py-3 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500" aria-describedby="chat-help">
+                        <button id="send-button" class="send-button bg-blue-700 text-white px-6 py-3 rounded-full hover:bg-blue-800 transition transform hover:scale-105 shadow-md flex items-center justify-center" aria-label="trimite întrebarea">
+                            trimite
+                        </button>
+                    </div>
+                    <div id="chat-help" class="sr-only">poți întreba despre formulare fiscale, impozite, kindergeld și alte aspecte fiscale pentru românii din germania</div>
+                    <div id="loading-indicator" class="hidden mt-4 flex items-center justify-center space-x-2" role="status" aria-live="polite">
+                        <div class="loader" aria-hidden="true"></div>
+                        <span class="text-sm text-slate-800">se procesează...</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="doneaza" class="py-16 px-4 sm:px-6 bg-gradient-to-b from-blue-50 to-white text-center fade-in-up">
+            <div class="max-w-4xl mx-auto">
+                <h2 class="text-3xl md:text-4xl font-bold mb-4 text-slate-800">susține-ne munca!</h2>
+                <p class="text-lg text-slate-600 mb-8">
+                    dacă ești mulțumit de serviciile gratuite, ne poți susține munca printr-o mică donație. fiecare contribuție ne ajută să menținem platforma activă și să dezvoltăm noi funcționalități.
+                </p>
+                <div class="flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-6 mx-auto">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/b/b5/paypal.svg" alt="logo paypal" class="w-28 h-auto opacity-80">
+                    <a href="https://paypal.me/laurdur" target="_blank" rel="noopener noreferrer" class="bg-blue-700 text-white px-10 py-4 rounded-full text-base font-semibold hover:bg-blue-800 transition transform hover:scale-105 shadow-lg" aria-label="donează prin paypal (deschide în fereastră nouă)">
+                        donează acum
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <section id="credite" class="py-12 bg-gray-100 fade-in-up">
+          <div class="max-w-3xl mx-auto text-center px-4">
+            <h3 class="text-2xl font-bold text-slate-800 mb-6">📌 credite & despre site</h3>
+            <div class="space-y-4 text-lg text-gray-800 font-medium">
+              <p>
+                <img class="flag" src="https://upload.wikimedia.org/wikipedia/commons/a/a5/flag_of_the_united_kingdom_%281-2%29.svg" alt="uk flag" />
+                <span>this site was created with the support of gemini ai + chatgpt</span>
+              </p>
+              <p>
+                <img class="flag" src="https://upload.wikimedia.org/wikipedia/commons/b/ba/flag_of_germany.svg" alt="de flag" />
+                <span>website erstellt mit unterstützung von gemini ai + chatgpt</span>
+              </p>
+              <p>
+                <img class="flag" src="https://upload.wikimedia.org/wikipedia/commons/7/73/flag_of_romania.svg" alt="ro flag" />
+                <span>site creat cu suportul gemini ai + chatgpt</span>
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <section id="contact" class="py-16 px-4 sm:px-6 text-center bg-gradient-to-b from-white to-gray-100 fade-in-up">
+            <div class="max-w-xl mx-auto">
+                <h2 class="text-3xl font-bold mb-4 text-slate-800">ai întrebări?</h2>
+                <p class="text-lg text-slate-600 mb-8">scrie-ne pe <strong class="text-blue-600">contactmimifiscal.com</strong> sau whatsapp și te ajutăm rapid.</p>
+                <a href="mailto:contactmimifiscal.com" class="text-blue-700 text-lg font-medium hover:underline transition-colors" aria-label="trimite email la contactmimifiscal.com">trimite email</a>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-gray-800 text-white py-2 text-center text-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 flex flex-col items-center space-y-4">
+            <p class="font-bold p-2 rounded-xl text-white">© 2025 mimifiscal · operat de laur · gdpr compliant</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const userinput = document.getElementById('user-input');
+            const sendbutton = document.getElementById('send-button');
+            const chatcontainer = document.getElementById('chat-container');
+            const loadingindicator = document.getElementById('loading-indicator');
+            const tryfreebutton = document.getElementById('try-free-btn');
+            const chatcard = document.querySelector('#demo .bg-white');
+
+            const apiendpoint = '/api/ask';
+            
+            function addmessage(text, isuser = false) {
+                const messagediv = document.createElement('div');
+                messagediv.className = `p-3 my-2 rounded-xl max-w-[85%] message-bubble ${isuser ? 'user' : 'ai'}`;
+                messagediv.textContent = text;
+                chatcontainer.appendChild(messagediv);
+                chatcontainer.scrollTop = chatcontainer.scrollHeight;
+            }
+
+            async function sendmessage() {
+                const prompt = userinput.value.trim();
+                if (prompt === '') return;
+
+                addmessage(prompt, true);
+                userinput.value = '';
+                userinput.disabled = true;
+                sendbutton.disabled = true;
+                loadingindicator.classList.remove('hidden');
+
+                try {
+                    const response = await fetch(apiendpoint, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ prompt: prompt })
+                    });
+
+                    if (!response.ok) {
+                        const errortext = await response.text();
+                        throw new Error(`API response status: ${response.status}. Body: ${errortext}`);
+                    }
+
+                    const result = await response.json();
+                    const text = result?.candidates?.[0]?.content?.parts?.[0]?.text || 'Nu am putut găsi un răspuns. Te rog să încerci din nou.';
+                    addmessage(text, false);
+                } catch (error) {
+                    console.error("Eroare la apelul către Vercel:", error);
+                    addmessage(`A apărut o eroare la procesarea cererii. Te rog să încerci din nou.`, false);
+                } finally {
+                    loadingindicator.classList.add('hidden');
+                    userinput.disabled = false;
+                    sendbutton.disabled = false;
+                    userinput.focus();
+                }
+            }
+            
+            sendbutton.addEventListener('click', sendmessage);
+            userinput.addEventListener('keydown', (event) => {
+                if (event.key === 'Enter') {
+                    event.preventDefault();
+                    sendmessage();
+                }
+            });
+
+            chatcard.addEventListener('mouseenter', () => {
+                chatcard.classList.add('glowing');
+            });
+            chatcard.addEventListener('mouseleave', () => {
+                chatcard.classList.remove('glowing');
+            });
+
+            tryfreebutton.addEventListener('click', () => {
+                setTimeout(() => {
+                    userinput.focus();
+                }, 100);
+            });
+
+            // logica pentru meniul mobil
+            const mobilemenubutton = document.getElementById('mobile-menu-button');
+            const mobilemenu = document.getElementById('mobile-menu');
+
+            mobilemenubutton.addEventListener('click', () => {
+                mobilemenu.classList.toggle('hidden');
+            });
+
+            // ascunde meniul mobil atunci când un link este apăsat
+            mobilemenu.querySelectorAll('a').forEach(link => {
+                link.addEventListener('click', () => {
+                    mobilemenu.classList.add('hidden');
+                });
+            });
+
+            // logica pentru animația de scroll
+            const observeroptions = {
+                root: null,
+                rootMargin: '0px',
+                threshold: 0.2 // declanșează când 20% din element este vizibil
+            };
+
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('is-visible');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, observeroptions);
+
+            const animatedelements = document.querySelectorAll('.fade-in-up');
+            animatedelements.forEach(element => {
+                observer.observe(element);
+            });
+        });
+    </script>
+</body>
+</html>
