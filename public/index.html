@@ -381,140 +381,143 @@
         </div>
     </footer>
 
-   <script>
+ <script>
 document.addEventListener('DOMContentLoaded', () => {
-    const userInput = document.getElementById('user-input');
-    const sendButton = document.getElementById('send-button');
-    const chatContainer = document.getElementById('chat-container');
-    const loadingIndicator = document.getElementById('loading-indicator');
-    const tryFreeButton = document.getElementById('try-free-btn');
-    const chatCard = document.querySelector('#demo .bg-white');
-    const apiEndpoint = '/api/ask';
+  const userInput = document.getElementById('user-input');
+  const sendButton = document.getElementById('send-button');
+  const chatContainer = document.getElementById('chat-container');
+  const loadingIndicator = document.getElementById('loading-indicator');
+  const tryFreeButton = document.getElementById('try-free-btn');
+  const chatCard = document.querySelector('#demo .bg-white');
+  const apiEndpoint = '/api/ask';
 
-    // 🔧 Transformă **text** în <strong>text>
-    function parseMarkdown(text) {
-        return text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+  // 🔧 Transformă **text** în <strong>text>
+  function parseMarkdown(text) {
+    return text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+  }
+
+  // ✍️ Afișare literă cu literă + cursor fals
+  function addMessageAnimated(text, isUser = false) {
+    const messageDiv = document.createElement('div');
+    messageDiv.className = `p-3 my-2 rounded-xl max-w-[85%] message-bubble ${isUser ? 'user' : 'ai'}`;
+    chatContainer.appendChild(messageDiv);
+    chatContainer.scrollTop = chatContainer.scrollHeight;
+
+    const parsedText = parseMarkdown(text);
+    const cursor = document.createElement('span');
+    cursor.className = 'typing-cursor';
+    messageDiv.innerHTML = cursor.outerHTML;
+
+    let i = 0;
+    const interval = setInterval(() => {
+      const current = messageDiv.innerHTML.replace(cursor.outerHTML, '');
+      const nextChar = parsedText.charAt(i);
+      messageDiv.innerHTML = current + nextChar + cursor.outerHTML;
+      i++;
+      if (i >= parsedText.length) {
+        clearInterval(interval);
+        messageDiv.innerHTML = current + parsedText;
+      }
+    }, 20);
+  }
+
+  async function sendMessage() {
+    const prompt = userInput.value.trim();
+    if (prompt === '') return;
+
+    addMessageAnimated(prompt, true);
+    userInput.value = '';
+    userInput.disabled = true;
+    sendButton.disabled = true;
+    loadingIndicator.classList.remove('hidden');
+
+    try {
+      const response = await fetch(apiEndpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ prompt: prompt })
+      });
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(`API response status: ${response.status}. Body: ${errorText}`);
+      }
+
+      const result = await response.json();
+      const text = result?.candidates?.[0]?.content?.parts?.[0]?.text || 'Nu am putut găsi un răspuns. Te rog să încerci din nou.';
+      addMessageAnimated(text, false);
+    } catch (error) {
+      console.error("Eroare la apelul către Vercel:", error);
+      addMessageAnimated(`A apărut o eroare la procesarea cererii. Te rog să încerci din nou.`, false);
+    } finally {
+      loadingIndicator.classList.add('hidden');
+      userInput.disabled = false;
+      sendButton.disabled = false;
+      userInput.focus();
     }
+  }
 
-    // ✍️ Afișare literă cu literă + cursor fals
-    function addMessageAnimated(text, isUser = false) {
-        const messageDiv = document.createElement('div');
-        messageDiv.className = `p-3 my-2 rounded-xl max-w-[85%] message-bubble ${isUser ? 'user' : 'ai'}`;
-        chatContainer.appendChild(messageDiv);
-        chatContainer.scrollTop = chatContainer.scrollHeight;
-
-        const parsedText = parseMarkdown(text);
-        const cursor = document.createElement('span');
-        cursor.className = 'typing-cursor';
-        messageDiv.innerHTML = cursor.outerHTML;
-
-        let i = 0;
-        const interval = setInterval(() => {
-            const current = messageDiv.innerHTML.replace(cursor.outerHTML, '');
-            messageDiv.innerHTML = current + parsedText.charAt(i) + cursor.outerHTML;
-            i++;
-            if (i >= parsedText.length) {
-                clearInterval(interval);
-                messageDiv.innerHTML = current + parsedText;
-            }
-        }, 20);
+  sendButton.addEventListener('click', sendMessage);
+  userInput.addEventListener('keydown', (event) => {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+      sendMessage();
     }
+  });
 
-    async function sendMessage() {
-        const prompt = userInput.value.trim();
-        if (prompt === '') return;
+  chatCard.addEventListener('mouseenter', () => {
+    chatCard.classList.add('glowing');
+  });
+  chatCard.addEventListener('mouseleave', () => {
+    chatCard.classList.remove('glowing');
+  });
 
-        addMessageAnimated(prompt, true);
-        userInput.value = '';
-        userInput.disabled = true;
-        sendButton.disabled = true;
-        loadingIndicator.classList.remove('hidden');
+  tryFreeButton.addEventListener('click', () => {
+    setTimeout(() => {
+      userInput.focus();
+    }, 100);
+  });
 
-        try {
-            const response = await fetch(apiEndpoint, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ prompt: prompt })
-            });
+  // Meniu mobil
+  const mobileMenuButton = document.getElementById('mobile-menu-button');
+  const mobileMenu = document.getElementById('mobile-menu');
 
-            if (!response.ok) {
-                const errorText = await response.text();
-                throw new Error(`API response status: ${response.status}. Body: ${errorText}`);
-            }
+  mobileMenuButton.addEventListener('click', () => {
+    mobileMenu.classList.toggle('hidden');
+  });
 
-            const result = await response.json();
-            const text = result?.candidates?.[0]?.content?.parts?.[0]?.text || 'Nu am putut găsi un răspuns. Te rog să încerci din nou.';
-            addMessageAnimated(text, false);
-        } catch (error) {
-            console.error("Eroare la apelul către Vercel:", error);
-            addMessageAnimated(`A apărut o eroare la procesarea cererii. Te rog să încerci din nou.`, false);
-        } finally {
-            loadingIndicator.classList.add('hidden');
-            userInput.disabled = false;
-            sendButton.disabled = false;
-            userInput.focus();
-        }
-    }
-
-    sendButton.addEventListener('click', sendMessage);
-    userInput.addEventListener('keydown', (event) => {
-        if (event.key === 'Enter') {
-            event.preventDefault();
-            sendMessage();
-        }
+  mobileMenu.querySelectorAll('a').forEach(link => {
+    link.addEventListener('click', () => {
+      mobileMenu.classList.add('hidden');
     });
+  });
 
-    chatCard.addEventListener('mouseenter', () => {
-        chatCard.classList.add('glowing');
+  // Animație scroll
+  const observerOptions = {
+    root: null,
+    rootMargin: '0px',
+    threshold: 0.2
+  };
+
+  const observer = new IntersectionObserver((entries, observer) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('is-visible');
+        observer.unobserve(entry.target);
+      }
     });
-    chatCard.addEventListener('mouseleave', () => {
-        chatCard.classList.remove('glowing');
-    });
+  }, observerOptions);
 
-    tryFreeButton.addEventListener('click', () => {
-        setTimeout(() => {
-            userInput.focus();
-        }, 100);
-    });
-
-    // Meniu mobil
-    const mobileMenuButton = document.getElementById('mobile-menu-button');
-    const mobileMenu = document.getElementById('mobile-menu');
-
-    mobileMenuButton.addEventListener('click', () => {
-        mobileMenu.classList.toggle('hidden');
-    });
-
-    mobileMenu.querySelectorAll('a').forEach(link => {
-        link.addEventListener('click', () => {
-            mobileMenu.classList.add('hidden');
-        });
-    });
-
-    // Animație scroll
-    const observerOptions = {
-        root: null,
-        rootMargin: '0px',
-        threshold: 0.2
-    };
-
-    const observer = new IntersectionObserver((entries, observer) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add('is-visible');
-                observer.unobserve(entry.target);
-            }
-        });
-    }, observerOptions);
-
-    const animatedElements = document.querySelectorAll('.fade-in-up');
-    animatedElements.forEach(element => {
-        observer.observe(element);
-    });
+  const animatedElements = document.querySelectorAll('.fade-in-up');
+  animatedElements.forEach(element => {
+    observer.observe(element);
+  });
 });
 </script>
+
 </body>
 </html>
+
 
 
 
