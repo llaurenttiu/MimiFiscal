@@ -377,50 +377,6 @@
 
             const apiEndpoint = '/api/ask';
             
-            function addMessage(text, isUser = false) {
-                const messageDiv = document.createElement('div');
-                messageDiv.className = `p-3 my-2 rounded-xl max-w-[85%] message-bubble ${isUser ? 'user' : 'ai'}`;
-                messageDiv.textContent = text;
-                chatContainer.appendChild(messageDiv);
-                chatContainer.scrollTop = chatContainer.scrollHeight;
-            }
-
-            async function sendMessage() {
-                const prompt = userInput.value.trim();
-                if (prompt === '') return;
-
-                addMessage(prompt, true);
-                userInput.value = '';
-                userInput.disabled = true;
-                sendButton.disabled = true;
-                loadingIndicator.classList.remove('hidden');
-
-                try {
-                    const response = await fetch(apiEndpoint, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ prompt: prompt })
-                    });
-
-                    if (!response.ok) {
-                        const errorText = await response.text();
-                        throw new Error(`API response status: ${response.status}. Body: ${errorText}`);
-                    }
-
-                    const result = await response.json();
-                    const text = result?.candidates?.[0]?.content?.parts?.[0]?.text || 'Nu am putut găsi un răspuns. Te rog să încerci din nou.';
-                    addMessage(text, false);
-                } catch (error) {
-                    console.error("Eroare la apelul către Vercel:", error);
-                    addMessage(`A apărut o eroare la procesarea cererii. Te rog să încerci din nou.`, false);
-                } finally {
-                    loadingIndicator.classList.add('hidden');
-                    userInput.disabled = false;
-                    sendButton.disabled = false;
-                    userInput.focus();
-                }
-            }
-            
             sendButton.addEventListener('click', sendMessage);
             userInput.addEventListener('keydown', (event) => {
                 if (event.key === 'Enter') {
@@ -530,6 +486,7 @@ async function sendMessage() {
     </script>
 </body>
 </html>
+
 
 
 
