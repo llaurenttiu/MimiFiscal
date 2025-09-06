@@ -401,6 +401,7 @@
             <p class="font-bold p-2 rounded-xl text-white">© 2025 MimiFiscal · Operat de Laur · GDPR Compliant</p>
         </div>
     </footer>
+
 <script>
 document.addEventListener('DOMContentLoaded', () => {
   const userInput = document.getElementById('user-input');
@@ -425,15 +426,34 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   function parseMarkdown(text) {
-    return text
-      .replace(/\*\*\*(.*?)\*\*\*/g, '<strong>$1</strong>') // ***text***
-      .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')     // **text**
-      .replace(/\*(.*?)\*/g, '$1')                          // *text*
-      .replace(/(^|\n)\* /g, '')                            // * la început de rând
-      .replace(/#/g, '')                                    // #
-      .replace(/_/g, '')                                    // _
-      .replace(/^- /gm, '')                                 // - la început de rând
-      .replace(/\n{2,}/g, '\n');                            // elimină spații duble
+    // Transformă listele Markdown în <ul><li>
+    const lines = text.split('\n');
+    let html = '';
+    let inList = false;
+
+    for (let line of lines) {
+      const trimmed = line.trim();
+      if (/^(\*|-)\s+/.test(trimmed)) {
+        if (!inList) {
+          html += '<ul>';
+          inList = true;
+        }
+        const item = trimmed.replace(/^(\*|-)\s+/, '');
+        html += `<li>${item}</li>`;
+      } else {
+        if (inList) {
+          html += '</ul>';
+          inList = false;
+        }
+        html += line.replace(/\*\*\*(.*?)\*\*\*/g, '<strong>$1</strong>')
+                    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                    .replace(/\*(.*?)\*/g, '$1')
+                    .replace(/#/g, '')
+                    .replace(/_/g, '');
+      }
+    }
+    if (inList) html += '</ul>';
+    return html;
   }
 
   function addMessageAnimated(text, isUser = false) {
@@ -590,9 +610,9 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 });
 </script>
-
 </body>
 </html>
+
 
 
 
