@@ -426,12 +426,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function parseMarkdown(text) {
     return text
-      .replace(/\*\*\*(.*?)\*\*\*/g, '<strong>$1</strong>') // triple stelute
-      .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')     // bold
-      .replace(/\*(.*?)\*/g, '$1')                          // stelute simple
-      .replace(/#/g, '')                                    // simbol diez
-      .replace(/^- /gm, '')                                 // listă cu minus
-      .replace(/_([^_]+)_/g, '$1');                         // sublinieri
+      .replace(/\*\*\*(.*?)\*\*\*/g, '<strong>$1</strong>') // ***text***
+      .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')     // **text**
+      .replace(/\*(.*?)\*/g, '$1')                          // *text*
+      .replace(/(^|\n)\* /g, '')                            // * la început de rând
+      .replace(/#/g, '')                                    // #
+      .replace(/_/g, '')                                    // _
+      .replace(/^- /gm, '')                                 // - la început de rând
+      .replace(/\n{2,}/g, '\n');                            // elimină spații duble
   }
 
   function addMessageAnimated(text, isUser = false) {
@@ -588,8 +590,10 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 });
 </script>
+
 </body>
 </html>
+
 
 
 
