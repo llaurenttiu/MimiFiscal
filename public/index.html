@@ -171,6 +171,21 @@
             justify-content: center;
             gap: 0.5rem;
         }
+        .typing-cursor {
+  display: inline-block;
+  width: 1px;
+  height: 1em;
+  background-color: #1f2937;
+  animation: blink 1s steps(2, start) infinite;
+  margin-left: 2px;
+  vertical-align: bottom;
+}
+
+@keyframes blink {
+  to {
+    visibility: hidden;
+  }
+}
     </style>
 </head>
 <body class="bg-gradient-to-br from-gray-100 to-blue-50 text-slate-800">
@@ -377,18 +392,26 @@ document.addEventListener('DOMContentLoaded', () => {
     const apiEndpoint = '/api/ask';
 
     function addMessageAnimated(text, isUser = false) {
-        const messageDiv = document.createElement('div');
-        messageDiv.className = `p-3 my-2 rounded-xl max-w-[85%] message-bubble ${isUser ? 'user' : 'ai'}`;
-        chatContainer.appendChild(messageDiv);
-        chatContainer.scrollTop = chatContainer.scrollHeight;
+  const messageDiv = document.createElement('div');
+  messageDiv.className = `p-3 my-2 rounded-xl max-w-[85%] message-bubble ${isUser ? 'user' : 'ai'}`;
+  chatContainer.appendChild(messageDiv);
+  chatContainer.scrollTop = chatContainer.scrollHeight;
 
-        let i = 0;
-        const interval = setInterval(() => {
-            messageDiv.textContent += text.charAt(i);
-            i++;
-            if (i >= text.length) clearInterval(interval);
-        }, 20);
+  const cursor = document.createElement('span');
+  cursor.className = 'typing-cursor';
+  messageDiv.appendChild(cursor);
+
+  let i = 0;
+  const interval = setInterval(() => {
+    messageDiv.insertBefore(document.createTextNode(text.charAt(i)), cursor);
+    i++;
+    if (i >= text.length) {
+      clearInterval(interval);
+      cursor.remove(); // elimină cursorul când s-a terminat
     }
+  }, 20);
+}
+
 
     async function sendMessage() {
         const prompt = userInput.value.trim();
@@ -485,6 +508,7 @@ document.addEventListener('DOMContentLoaded', () => {
 </script>
 </body>
 </html>
+
 
 
 
