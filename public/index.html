@@ -424,40 +424,40 @@ document.addEventListener('DOMContentLoaded', () => {
     chatContainer.scrollTop = chatContainer.scrollHeight;
   });
 
-  function parseMarkdown(text) {
-    const lines = text.split('\n');
-    let html = '';
-    let inList = false;
+    function parseMarkdown(text) {
+  const lines = text.split('\n');
+  let html = '';
+  let inList = false;
 
-    for (let line of lines) {
-      const trimmed = line.trim();
+  for (let line of lines) {
+    const trimmed = line.trim();
 
-      if (/^(\*|-)\s+/.test(trimmed)) {
-        if (!inList) {
-          html += '<ul>';
-          inList = true;
-        }
-        const item = trimmed.replace(/^(\*|-)\s+/, '');
-        html += `<li>${item}</li>`;
-      } else {
-        if (inList) {
-          html += '</ul>';
-          inList = false;
-        }
-
-        html += line
-          .replace(/\*\*\*(.*?)\*\*\*/g, '<strong>$1</strong>')
-          .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-          .replace(/\*(.*?)\*/g, '$1')
-          .replace(/(^|\s)\*(\s|$)/g, '')
-          .replace(/#/g, '')
-          .replace(/_/g, '');
+    if (/^(\*|-)\s+/.test(trimmed)) {
+      if (!inList) {
+        html += '<ul>';
+        inList = true;
       }
-    }
+      const item = trimmed.replace(/^(\*|-)\s+/, '');
+      html += `<li>${item}</li>`;
+    } else {
+      if (inList) {
+        html += '</ul>';
+        inList = false;
+      }
 
-    if (inList) html += '</ul>';
-    return html;
+      html += line
+        .replace(/\*\*\*(.*?)\*\*\*/g, '<strong>$1</strong>')
+        .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+        .replace(/\*(.*?)\*/g, '$1')
+        .replace(/(^|\s)\*(\s|$)/g, '')
+        .replace(/#/g, '')
+        .replace(/_/g, '');
+    }
   }
+
+  if (inList) html += '</ul>';
+  return html;
+}
 
   function addMessageAnimated(text, isUser = false) {
     const messageDiv = document.createElement('div');
@@ -618,6 +618,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 </body>
 </html>
+
 
 
 
