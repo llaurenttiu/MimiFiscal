@@ -401,7 +401,6 @@
             <p class="font-bold p-2 rounded-xl text-white">© 2025 MimiFiscal · Operat de Laur · GDPR Compliant</p>
         </div>
     </footer>
-
 <script>
 document.addEventListener('DOMContentLoaded', () => {
   const userInput = document.getElementById('user-input');
@@ -427,9 +426,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function parseMarkdown(text) {
     return text
-      .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-      .replace(/(^|\s)\*(.*?)\*(\s|$)/g, '$1$2$3')
-      .replace(/#/g, '');
+      .replace(/\*\*\*(.*?)\*\*\*/g, '<strong>$1</strong>') // triple stelute
+      .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')     // bold
+      .replace(/\*(.*?)\*/g, '$1')                          // stelute simple
+      .replace(/#/g, '')                                    // simbol diez
+      .replace(/^- /gm, '')                                 // listă cu minus
+      .replace(/_([^_]+)_/g, '$1');                         // sublinieri
   }
 
   function addMessageAnimated(text, isUser = false) {
@@ -588,6 +590,7 @@ document.addEventListener('DOMContentLoaded', () => {
 </script>
 </body>
 </html>
+
 
 
 
